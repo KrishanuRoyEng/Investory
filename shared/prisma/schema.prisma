@@ -1,0 +1,272 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  LEARNER
+  INSTRUCTOR
+  ADMIN
+  SUPPORT
+}
+
+enum CourseFormat {
+  SELF_PACED
+  LIVE
+  BUNDLE
+}
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum DoubtStatus {
+  OPEN
+  ANSWERED
+}
+
+enum LiveSessionType {
+  CLASS
+  WEBINAR
+}
+
+enum LiveSessionStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum TransactionStatus {
+  SUCCESS
+  FAILED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String   @default("User")
+  phone     String?
+  password  String // stored hashed (argon2id)
+  role      Role     @default(LEARNER)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  enrollments  Enrollment[]
+  orders       Order[]
+  attendances  Attendance[]
+  doubts       Doubt[]
+  certificates Certificate[]
+  liveSessions LiveSession[] @relation("InstructorSessions")
+}
+
+model Course {
+  id          String       @id @default(uuid())
+  slug        String       @unique
+  title       String
+  description String
+  pricePaise  Int
+  format      CourseFormat
+  level       CourseLevel
+  status      CourseStatus @default(DRAFT)
+  language    String
+  thumbnailUrl String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  enrollments  Enrollment[]
+  liveSessions LiveSession[]
+  modules      CourseModule[]
+  orderItems   OrderItem[]
+  certificates Certificate[]
+
+  @@index([format, level, language])
+}
+
+model CourseModule {
+  id        String   @id @default(uuid())
+  courseId  String
+  title     String
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  course  Course   @relation(fields: [courseId], references: [id])
+  lessons Lesson[]
+}
+
+model Lesson {
+  id          String   @id @default(uuid())
+  moduleId    String
+  title       String
+  videoUrl    String?
+  durationSec Int?
+  order       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  module CourseModule @relation(fields: [moduleId], references: [id])
+  doubts Doubt[]
+}
+
+model Enrollment {
+  id                String   @id @default(uuid())
+  userId            String
+  courseId          String
+  progressPercent   Int      @default(0)
+  lastWatchedLesson String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  userId          String
+  totalPaise      Int
+  discountPaise   Int         @default(0)
+  status          OrderStatus @default(PENDING)
+  invoiceUrl      String?
+  appliedCouponId String?
+  expiresAt       DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id])
+  coupon       Coupon?       @relation(fields: [appliedCouponId], references: [id])
+  items        OrderItem[]
+  transactions Transaction[]
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  courseId   String
+  pricePaise Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  order  Order  @relation(fields: [orderId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+}
+
+model Transaction {
+  id                String            @id @default(uuid())
+  orderId           String
+  amountPaise       Int
+  razorpayPaymentId String?
+  razorpayOrderId   String?
+  status            TransactionStatus
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+}
+
+model LiveSession {
+  id           String            @id @default(uuid())
+  title        String
+  type         LiveSessionType
+  status       LiveSessionStatus @default(SCHEDULED)
+  schedule     DateTime
+  capacity     Int?
+  instructorId String
+  courseId     String?
+  recordingUrl String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  instructor  User         @relation("InstructorSessions", fields: [instructorId], references: [id])
+  course      Course?      @relation(fields: [courseId], references: [id])
+  attendances Attendance[]
+  doubts      Doubt[]
+}
+
+model Attendance {
+  id                String    @id @default(uuid())
+  userId            String?
+  liveSessionId     String
+  registrationName  String
+  registrationEmail String
+  registrationPhone String?
+  joinTime          DateTime?
+  leaveTime         DateTime?
+
+  user        User?       @relation(fields: [userId], references: [id])
+  liveSession LiveSession @relation(fields: [liveSessionId], references: [id])
+
+  // Unique constraint must be on (registrationEmail, liveSessionId) to prevent duplicates per session
+  @@unique([registrationEmail, liveSessionId])
+  // Also enforce uniqueness by userId so an authenticated user cannot register twice
+  @@unique([userId, liveSessionId])
+}
+
+model Doubt {
+  id            String      @id @default(uuid())
+  userId        String
+  lessonId      String?
+  liveSessionId String?
+  question      String
+  status        DoubtStatus @default(OPEN)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id])
+  lesson      Lesson?      @relation(fields: [lessonId], references: [id])
+  liveSession LiveSession? @relation(fields: [liveSessionId], references: [id])
+}
+
+model Certificate {
+  id       String   @id @default(uuid())
+  userId   String
+  courseId String
+  url      String
+  issuedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FLAT
+}
+
+model Coupon {
+  id           String       @id @default(uuid())
+  code         String       @unique
+  discountType DiscountType // PERCENTAGE, FLAT
+  discountVal  Int // if FLAT, it's paise. if PERCENTAGE, it's % (or basis points)
+  validUntil   DateTime
+  usageLimit   Int?
+  usageCount   Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  orders Order[]
+}

@@ -1,0 +1,765 @@
+openapi: 3.0.3
+info:
+  title: SVDTS Client API
+  version: 1.0.0
+  description: >
+    API documentation for the SVDTS Learning Management System.
+    Base path for all endpoints is `/api/v1`.
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local development server
+
+paths:
+  # --- Auth Module ---
+  /auth/signup:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+                phone:
+                  type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          email:
+                            type: string
+                          role:
+                            type: string
+                  meta:
+                    type: object
+        '400':
+          description: Bad Request
+        '409':
+          description: Conflict
+  /auth/login:
+    post:
+      summary: Authenticate user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          email:
+                            type: string
+                          role:
+                            type: string
+                  meta:
+                    type: object
+        '401':
+          description: Unauthorized
+  /auth/refresh:
+    post:
+      summary: Refresh access token
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          email:
+                            type: string
+                          role:
+                            type: string
+                  meta:
+                    type: object
+        '401':
+          description: Unauthorized
+  /auth/logout:
+    post:
+      summary: Logout user (invalidate tokens)
+      responses:
+        '200':
+          description: OK
+
+  # --- Courses Module ---
+  /courses:
+    get:
+      summary: List and filter courses
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 20
+        - in: query
+          name: format
+          schema:
+            type: string
+            enum: [SELF_PACED, LIVE, BUNDLE]
+        - in: query
+          name: level
+          schema:
+            type: string
+            enum: [BEGINNER, INTERMEDIATE, ADVANCED]
+        - in: query
+          name: language
+          schema:
+            type: string
+        - in: query
+          name: q
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Course'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+    post:
+      summary: Create a draft course (Admin/Instructor)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [slug, title, description, pricePaise, format, level, language]
+              properties:
+                slug:
+                  type: string
+                title:
+                  type: string
+                description:
+                  type: string
+                pricePaise:
+                  type: integer
+                format:
+                  type: string
+                level:
+                  type: string
+                language:
+                  type: string
+                status:
+                  type: string
+                  enum: [DRAFT, PUBLISHED, ARCHIVED]
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Conflict (Slug already exists)
+  /courses/{slug}:
+    get:
+      summary: Get course details
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CourseDetail'
+                  meta:
+                    type: object
+                    nullable: true
+        '404':
+          description: Not Found
+  /courses/{id}/modules:
+    post:
+      summary: Add a module to a course (Admin/Instructor)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, order]
+              properties:
+                title:
+                  type: string
+                order:
+                  type: integer
+      responses:
+        '201':
+          description: Created
+  /courses/modules/{moduleId}/lessons:
+    post:
+      summary: Add a lesson to a module (Admin/Instructor)
+      parameters:
+        - in: path
+          name: moduleId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, order]
+              properties:
+                title:
+                  type: string
+                order:
+                  type: integer
+                videoUrl:
+                  type: string
+                durationSec:
+                  type: integer
+      responses:
+        '201':
+          description: Created
+
+  # --- Payments Module ---
+  /payments/checkout:
+    post:
+      summary: Initialize Razorpay checkout for a cart/course
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [courseIds]
+              properties:
+                courseIds:
+                  type: array
+                  items:
+                    type: string
+                couponCode:
+                  type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      orderId:
+                        type: string
+                      razorpayOrderId:
+                        type: string
+                      amount:
+                        type: integer
+                      currency:
+                        type: string
+        '400':
+          description: Bad Request (Invalid coupon, etc)
+  /payments/verify:
+    post:
+      summary: Client-side verification of Razorpay payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [razorpayOrderId, razorpayPaymentId, razorpaySignature]
+              properties:
+                razorpayOrderId:
+                  type: string
+                razorpayPaymentId:
+                  type: string
+                razorpaySignature:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        '400':
+          description: Verification failed
+  /payments/webhook:
+    post:
+      summary: Razorpay webhook callback
+      parameters:
+        - in: header
+          name: x-razorpay-signature
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: OK
+
+  # --- Dashboard Module ---
+  /dashboard/profile:
+    put:
+      summary: Update user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                phone:
+                  type: string
+      responses:
+        '200':
+          description: OK
+  /dashboard/password:
+    put:
+      summary: Change password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currentPassword, newPassword]
+              properties:
+                currentPassword:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request (incorrect password)
+  /dashboard/courses:
+    get:
+      summary: List user's enrolled courses and progress
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          description: OK
+  /dashboard/sessions:
+    get:
+      summary: List upcoming live sessions for enrolled courses
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          description: OK
+  /dashboard/orders:
+    get:
+      summary: Order history
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          description: OK
+  /dashboard/certificates:
+    get:
+      summary: Earned certificates
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          description: OK
+  /dashboard/doubts:
+    get:
+      summary: User doubt history
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/PageSizeParam'
+      responses:
+        '200':
+          description: OK
+
+  # --- Live Sessions Module ---
+  /live-sessions/{id}/register:
+    post:
+      summary: Register for a live class
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Forbidden (Not enrolled)
+        '409':
+          description: Conflict (Already registered or Capacity reached)
+  /live-sessions/{id}/join:
+    get:
+      summary: Get access token/URL to join stream
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      rtcToken:
+                        type: string
+                      rtmToken:
+                        type: string
+                      channelName:
+                        type: string
+                      uid:
+                        type: string
+                      role:
+                        type: integer
+                      expiresAt:
+                        type: string
+        '403':
+          description: Forbidden (Not active or not registered)
+  /live-sessions/{id}/doubts:
+    post:
+      summary: Submit a doubt for the session
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [question]
+              properties:
+                question:
+                  type: string
+      responses:
+        '201':
+          description: Created
+        '403':
+          description: Forbidden (Not registered)
+
+  # --- Webinars Module ---
+  /webinars:
+    get:
+      summary: List public and exclusive webinars
+      responses:
+        '200':
+          description: OK
+  /webinars/{id}:
+    get:
+      summary: Get webinar details
+      responses:
+        '200':
+          description: OK
+  /webinars/{id}/register:
+    post:
+      summary: Register for a webinar
+      responses:
+        '200':
+          description: OK
+  /webinars/{id}/join:
+    get:
+      summary: Join webinar stream
+      responses:
+        '200':
+          description: OK
+
+  # --- Admin Module ---
+  /admin/users:
+    get:
+      summary: List all users
+      responses:
+        '200':
+          description: OK
+  /admin/users/{id}:
+    put:
+      summary: Update user (roles, etc.)
+      responses:
+        '200':
+          description: OK
+
+  /admin/courses:
+    get:
+      summary: List courses (admin view)
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Create a new course
+      responses:
+        '201':
+          description: Created
+  /admin/courses/{id}:
+    put:
+      summary: Update course
+      responses:
+        '200':
+          description: OK
+  /admin/courses/{id}/modules:
+    post:
+      summary: Add a module to a course
+      responses:
+        '201':
+          description: Created
+
+  /admin/live-sessions:
+    post:
+      summary: Create a live session
+      responses:
+        '201':
+          description: Created
+  /admin/live-sessions/{id}:
+    put:
+      summary: Update a live session
+      responses:
+        '200':
+          description: OK
+
+  /admin/webinars:
+    post:
+      summary: Create a webinar
+      responses:
+        '201':
+          description: Created
+  /admin/webinars/{id}:
+    put:
+      summary: Update a webinar
+      responses:
+        '200':
+          description: OK
+
+  /admin/orders:
+    get:
+      summary: List all orders
+      responses:
+        '200':
+          description: OK
+  /admin/orders/{id}/refund:
+    post:
+      summary: Refund an order
+      responses:
+        '200':
+          description: OK
+
+  /admin/coupons:
+    get:
+      summary: List all coupons
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Create a new coupon
+      responses:
+        '201':
+          description: Created
+
+components:
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      description: Page number for pagination
+      required: false
+      schema:
+        type: integer
+        default: 1
+    PageSizeParam:
+      name: pageSize
+      in: query
+      description: Number of items per page
+      required: false
+      schema:
+        type: integer
+        default: 20
+
+  schemas:
+    PaginationMeta:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        total:
+          type: integer
+
+    Course:
+      type: object
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        pricePaise:
+          type: integer
+        format:
+          type: string
+        level:
+          type: string
+        status:
+          type: string
+        language:
+          type: string
+        thumbnailUrl:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CourseDetail:
+      allOf:
+        - $ref: '#/components/schemas/Course'
+        - type: object
+          properties:
+            modules:
+              type: array
+              items:
+                $ref: '#/components/schemas/CourseModule'
+
+    CourseModule:
+      type: object
+      properties:
+        id:
+          type: string
+        courseId:
+          type: string
+        title:
+          type: string
+        order:
+          type: integer
+        lessons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lesson'
+
+    Lesson:
+      type: object
+      properties:
+        id:
+          type: string
+        moduleId:
+          type: string
+        title:
+          type: string
+        videoUrl:
+          type: string
+          nullable: true
+        durationSec:
+          type: integer
+          nullable: true
+        order:
+          type: integer

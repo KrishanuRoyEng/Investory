@@ -1,0 +1,33 @@
+node_modules
+.DS_Store
+
+# Frontend
+frontend/.next/
+frontend/out/
+frontend/build
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/.turbo
+
+# Backend
+backend/dist/
+backend/build/
+backend/.env
+backend/coverage/
+backend/*.log
+
+# Prisma
+shared/prisma/*.db
+shared/prisma/*.db-journal
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Monorepo
+.env
+.npm

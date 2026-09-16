@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #050505;
+    --primary: #10b981;
+    --primary-foreground: #ffffff;
+    --surface: #f8fafc;
+    --surface-foreground: #0f172a;
+    --border: #e2e8f0;
+  }
+
+  .dark {
+    --background: #050505;
+    --foreground: #f8fafc;
+    --primary: #34d399;
+    --primary-foreground: #050505;
+    --surface: #111111;
+    --surface-foreground: #f8fafc;
+    --border: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
