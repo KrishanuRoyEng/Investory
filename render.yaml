@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: investory-backend
+    env: node
+    buildCommand: npm install -g pnpm && pnpm install && pnpm --filter backend build
+    startCommand: cd backend && pnpm prisma migrate deploy && pnpm prisma db seed && pnpm start:prod
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: investory-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: investory-redis
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+
+  - type: redis
+    name: investory-redis
+    ipAllowList: [] # Restrict to internal Render services
+
+databases:
+  - name: investory-db
+    databaseName: investory
+    user: investory
