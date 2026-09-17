@@ -21,6 +21,7 @@ import { PaymentsModule } from '../payments/payments.module.js';
             port: parseInt(url.port) || 6379,
             password: url.password || undefined,
             username: url.username || undefined,
+            tls: url.protocol === "rediss:" ? {} : undefined,
           },
         };
       },
