@@ -77,4 +77,4 @@
   "prisma": {
     "seed": "npx --yes tsx prisma/seed.ts"
   }
-}\n
+}
