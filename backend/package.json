@@ -75,6 +75,7 @@
     "prisma": "^5.22.0"
   },
   "prisma": {
-    "seed": "npx --yes tsx prisma/seed.ts"
+    "seed": "npx --yes tsx prisma/seed.ts",
+    "schema": "../shared/prisma/schema.prisma"
   }
 }
