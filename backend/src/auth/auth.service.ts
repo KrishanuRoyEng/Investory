@@ -232,7 +232,17 @@ export class AuthService {
   }
 
   private async generateTokensAndSetCookie(user: User, res: Response, existingFamilyId?: string) {
-    const payload = { sub: user.id, email: user.email, role: user.role };
+    let permissions: string[] = [];
+    if (user.role === 'STAFF') {
+      const fullUser = await this.prisma.user.findUnique({
+        where: { id: user.id },
+        include: { staffRole: true }
+      });
+      if (fullUser?.staffRole) {
+        permissions = fullUser.staffRole.permissions;
+      }
+    }
+    const payload = { sub: user.id, email: user.email, role: user.role, permissions };
     const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
     const refreshToken = uuidv4();
     const familyId = existingFamilyId || uuidv4();
@@ -267,6 +277,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         role: user.role,
+        permissions: (payload as any).permissions,
       }
     };
   }

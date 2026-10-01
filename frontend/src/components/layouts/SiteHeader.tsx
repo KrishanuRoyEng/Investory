@@ -21,7 +21,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-extrabold tracking-tight text-foreground">
-              Invest<span className="text-primary">ory</span>
+              INVES<span className="text-primary">ONE</span>
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-2 text-sm font-medium">

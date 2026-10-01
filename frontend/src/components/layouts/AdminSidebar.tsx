@@ -7,6 +7,7 @@ import { logout } from '@/lib/store/auth.store';
 import { ArrowLeft, Menu, X, Moon, Sun } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
+import { Shield } from 'lucide-react';
 
 export function AdminSidebar() {
   const pathname = usePathname();
@@ -26,6 +27,7 @@ export function AdminSidebar() {
     { href: '/admin/users', label: 'Users', always: isAdmin },
     { href: '/admin/orders', label: 'Orders', always: isAdmin },
     { href: '/admin/coupons', label: 'Coupons', always: isAdmin },
+    { href: '/admin/roles', label: 'Roles', always: user?.role === 'SUPERADMIN' || user?.role === 'STAFF' || user?.role === 'ADMIN' },
   ];
 
   return (

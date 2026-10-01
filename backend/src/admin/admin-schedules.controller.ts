@@ -3,6 +3,9 @@ import { LiveSessionsService } from '../live-sessions/live-sessions.service.js';
 import { WebinarsService } from '../webinars/webinars.service.js';
 import { Roles } from '../common/decorators/roles.decorator.js';
 import { Role } from '@prisma/client';
+import { UseGuards } from '@nestjs/common';
+import { PermissionsGuard } from '../auth/guards/permissions.guard.js';
+import { RequirePermission } from '../auth/decorators/permissions.decorator.js';
 import type { Request } from 'express';
 import { IsString, IsOptional, IsDateString, IsInt, Min, IsNotEmpty } from 'class-validator';
 
@@ -101,7 +104,9 @@ export class RecordingDto {
 }
 
 @Controller('admin')
-@Roles(Role.ADMIN, Role.INSTRUCTOR)
+@UseGuards(PermissionsGuard)
+@Roles(Role.ADMIN, Role.SUPERADMIN, Role.STAFF, Role.INSTRUCTOR)
+@RequirePermission('manage_schedules')
 export class AdminSchedulesController {
   constructor(
     private readonly liveSessionsService: LiveSessionsService,

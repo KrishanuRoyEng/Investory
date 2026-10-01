@@ -47,7 +47,11 @@ export default function LoginPage() {
       // @ts-ignore
       setAuth(resData.data.accessToken, resData.data.user);
       toast.success('Successfully logged in');
-      router.push('/dashboard');
+      if (['ADMIN', 'SUPERADMIN', 'STAFF'].includes(resData.data.user.role)) {
+        router.push('/admin');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
     }

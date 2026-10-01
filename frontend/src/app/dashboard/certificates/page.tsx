@@ -21,34 +21,11 @@ export default function DashboardCertificatesPage() {
     }
   });
 
-  const handleDownload = async (courseId: string, courseTitle: string) => {
-    try {
-      setDownloading(courseId);
-      const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/dashboard/certificates/${courseId}/download`;
-      
-      const res = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!res.ok) throw new Error('Download failed');
-      
-      const blob = await res.blob();
-      const objectUrl = window.URL.createObjectURL(blob);
-      
-      const a = document.createElement('a');
-      a.href = objectUrl;
-      a.download = `${courseTitle.replace(/\s+/g, '-').toLowerCase()}-certificate.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(objectUrl);
-      
-    } catch (error) {
-      toast.error('Failed to download certificate');
-    } finally {
-      setDownloading(null);
+  const handleDownload = (url?: string) => {
+    if (url) {
+      window.open(url, '_blank');
+    } else {
+      toast.info('Certificate is being generated. Please check back later.');
     }
   };
 
@@ -82,12 +59,12 @@ export default function DashboardCertificatesPage() {
               <p className="text-sm text-foreground/60 mb-4">Issued: {new Date(cert.issuedAt).toLocaleDateString()}</p>
               
               <button 
-                onClick={() => handleDownload(cert.courseId, cert.course.title)}
-                disabled={downloading === cert.courseId}
-                className="mt-auto px-4 py-2 bg-surface/80 hover:bg-slate-700 text-foreground rounded font-medium transition-colors w-full flex items-center justify-center gap-2"
+                onClick={() => handleDownload(cert.url)}
+                disabled={!cert.url}
+                className="mt-auto px-4 py-2 bg-surface/80 hover:bg-slate-700 text-foreground rounded font-medium transition-colors w-full flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                {downloading === cert.courseId ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                {downloading === cert.courseId ? 'Generating...' : 'Download PDF'}
+                {!cert.url ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                {!cert.url ? 'Generating...' : 'View PDF'}
               </button>
             </div>
           ))

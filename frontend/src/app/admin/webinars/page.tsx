@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api/client';
+import { useAuthStore } from '@/lib/store/auth.store';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { toast } from 'sonner';
 
@@ -89,12 +90,23 @@ export default function AdminWebinarsPage() {
           <h1 className="text-3xl font-bold text-foreground tracking-tight">Webinars</h1>
           <p className="mt-2 text-foreground/60">Manage public or gated large-scale events.</p>
         </div>
-        <button
-          onClick={() => setIsCreateOpen(true)}
-          className="px-4 py-2 bg-primary/90 hover:bg-primary text-foreground font-medium rounded-lg transition-colors"
-        >
-          Schedule Webinar
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => {
+              const token = useAuthStore.getState().accessToken;
+              window.open(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/admin/export/webinars?access_token=${token}`, '_blank');
+            }}
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-foreground font-medium rounded-lg transition-colors border border-border"
+          >
+            Export to Excel
+          </button>
+          <button
+            onClick={() => setIsCreateOpen(true)}
+            className="px-4 py-2 bg-primary/90 hover:bg-primary text-foreground font-medium rounded-lg transition-colors"
+          >
+            Schedule Webinar
+          </button>
+        </div>
       </div>
 
       {isCreateOpen && (
@@ -199,6 +211,16 @@ export default function AdminWebinarsPage() {
                           Add Recording
                         </button>
                       )}
+                      <button
+                        onClick={() => {
+                          const token = useAuthStore.getState().accessToken;
+                          window.open(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/admin/export/webinars/${webinar.id}/analytics?access_token=${token}`, '_blank');
+                        }}
+                        className="text-slate-400 hover:text-slate-200 font-medium"
+                        title="Export Analytics"
+                      >
+                        Analytics
+                      </button>
                     </td>
                   </tr>
                 ))

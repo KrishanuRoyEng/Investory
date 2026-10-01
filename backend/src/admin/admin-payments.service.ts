@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { PaymentsService } from '../payments/payments.service.js';
-import { OrderStatus, DiscountType } from '@prisma/client';
+import { OrderStatus, DiscountType, Prisma } from '@prisma/client';
 
 @Injectable()
 export class AdminPaymentsService {
@@ -10,10 +10,23 @@ export class AdminPaymentsService {
     private readonly paymentsService: PaymentsService,
   ) {}
 
-  async findAllOrders(page: number = 1, pageSize: number = 20) {
+  buildOrderWhereClause(status?: OrderStatus, startDate?: string, endDate?: string): Prisma.OrderWhereInput {
+    const where: Prisma.OrderWhereInput = {};
+    if (status) where.status = status;
+    if (startDate || endDate) {
+      where.createdAt = {};
+      if (startDate) where.createdAt.gte = new Date(startDate);
+      if (endDate) where.createdAt.lte = new Date(endDate);
+    }
+    return where;
+  }
+
+  async findAllOrders(page: number = 1, pageSize: number = 20, status?: OrderStatus, startDate?: string, endDate?: string) {
     const skip = (page - 1) * pageSize;
+    const where = this.buildOrderWhereClause(status, startDate, endDate);
     const [orders, total] = await Promise.all([
       this.prisma.order.findMany({
+        where,
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
@@ -41,10 +54,22 @@ export class AdminPaymentsService {
     return this.paymentsService.refundOrder(orderId);
   }
 
-  async findAllCoupons(page: number = 1, pageSize: number = 20) {
+  buildCouponWhereClause(startDate?: string, endDate?: string): Prisma.CouponWhereInput {
+    const where: Prisma.CouponWhereInput = {};
+    if (startDate || endDate) {
+      where.createdAt = {};
+      if (startDate) where.createdAt.gte = new Date(startDate);
+      if (endDate) where.createdAt.lte = new Date(endDate);
+    }
+    return where;
+  }
+
+  async findAllCoupons(page: number = 1, pageSize: number = 20, startDate?: string, endDate?: string) {
     const skip = (page - 1) * pageSize;
+    const where = this.buildCouponWhereClause(startDate, endDate);
     const [coupons, total] = await Promise.all([
       this.prisma.coupon.findMany({
+        where,
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },

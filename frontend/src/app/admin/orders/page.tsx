@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api/client';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { RoleGuard } from '@/components/layouts/RoleGuard';
+import { useAuthStore } from '@/lib/store/auth.store';
 import { toast } from 'sonner';
 
 export default function AdminOrdersPage() {
@@ -40,13 +41,22 @@ export default function AdminOrdersPage() {
   });
 
   return (
-    <RoleGuard allowedRoles={['ADMIN']}>
+    <RoleGuard allowedRoles={['ADMIN', 'SUPERADMIN', 'STAFF']}>
       <div className="p-8">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-foreground tracking-tight">Orders</h1>
             <p className="mt-2 text-foreground/60">View transactions and manage refunds.</p>
           </div>
+          <button
+            onClick={() => {
+              const token = useAuthStore.getState().accessToken;
+              window.open(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/admin/export/orders?access_token=${token}`, '_blank');
+            }}
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-foreground font-medium rounded-lg transition-colors border border-border"
+          >
+            Export to Excel
+          </button>
         </div>
 
         <div className="bg-surface border border-border rounded-md overflow-hidden">

@@ -7,7 +7,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <RoleGuard allowedRoles={['ADMIN', 'INSTRUCTOR']}>
+    <RoleGuard allowedRoles={['ADMIN', 'SUPERADMIN', 'STAFF', 'INSTRUCTOR']}>
       <div className="flex flex-col md:flex-row h-screen bg-background text-foreground/80">
         <AdminSidebar />
         <main className="flex-1 overflow-y-auto bg-background p-4 md:p-8">

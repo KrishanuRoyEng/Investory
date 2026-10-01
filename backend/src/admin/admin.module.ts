@@ -11,6 +11,9 @@ import { PaymentsModule } from '../payments/payments.module.js';
 import { LiveSessionsModule } from '../live-sessions/live-sessions.module.js';
 import { WebinarsModule } from '../webinars/webinars.module.js';
 
+import { AdminExportController } from './export.controller.js';
+import { AdminRolesController } from './roles.controller.js';
+
 @Module({
   imports: [PrismaModule, CourseModule, PaymentsModule, LiveSessionsModule, WebinarsModule],
   controllers: [
@@ -18,6 +21,8 @@ import { WebinarsModule } from '../webinars/webinars.module.js';
     AdminCoursesController,
     AdminPaymentsController,
     AdminSchedulesController,
+    AdminExportController,
+    AdminRolesController,
   ],
   providers: [AdminUsersService, AdminPaymentsService],
 })

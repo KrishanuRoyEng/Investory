@@ -11,6 +11,8 @@ enum Role {
   LEARNER
   INSTRUCTOR
   ADMIN
+  SUPERADMIN
+  STAFF
   SUPPORT
 }
 
@@ -67,9 +69,12 @@ model User {
   phone     String?
   password  String // stored hashed (argon2id)
   role      Role     @default(LEARNER)
+  staffRoleId String?
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  staffRole   StaffRole? @relation(fields: [staffRoleId], references: [id])
 
   enrollments  Enrollment[]
   orders       Order[]
@@ -269,4 +274,15 @@ model Coupon {
   updatedAt    DateTime     @updatedAt
 
   orders Order[]
+}
+
+
+model StaffRole {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  permissions String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users       User[]
 }

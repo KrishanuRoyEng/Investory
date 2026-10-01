@@ -2,6 +2,9 @@ import { Controller, Get, Put, Param, Body, Query } from '@nestjs/common';
 import { AdminUsersService } from './admin-users.service.js';
 import { Roles } from '../common/decorators/roles.decorator.js';
 import { Role } from '@prisma/client';
+import { UseGuards } from '@nestjs/common';
+import { PermissionsGuard } from '../auth/guards/permissions.guard.js';
+import { RequirePermission } from '../auth/decorators/permissions.decorator.js';
 import { IsOptional, IsString, IsEnum } from 'class-validator';
 
 export class UpdateUserDto {
@@ -16,10 +19,16 @@ export class UpdateUserDto {
   @IsEnum(Role)
   @IsOptional()
   role?: Role;
+
+  @IsString()
+  @IsOptional()
+  staffRoleId?: string;
 }
 
 @Controller('admin/users')
-@Roles(Role.ADMIN)
+@UseGuards(PermissionsGuard)
+@Roles(Role.ADMIN, Role.SUPERADMIN, Role.STAFF)
+@RequirePermission('manage_users')
 export class AdminUsersController {
   constructor(private readonly adminUsersService: AdminUsersService) {}
 
@@ -36,7 +45,7 @@ export class AdminUsersController {
 
   @Put(':id')
   async updateUser(@Param('id') id: string, @Body() dto: UpdateUserDto) {
-    const data = await this.adminUsersService.updateUser(id, dto.name, dto.phone, dto.role);
+    const data = await this.adminUsersService.updateUser(id, dto.name, dto.phone, dto.role, dto.staffRoleId);
     return { data, meta: null };
   }
 }

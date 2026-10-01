@@ -40,6 +40,11 @@ export class DashboardController {
     return this.dashboardService.getEnrolledCourses(req.user.userId, query);
   }
 
+  @Put('courses/:courseId/progress')
+  async updateProgress(@Req() req: any, @Param('courseId') courseId: string, @Body() body: { progressPercent: number }) {
+    return this.dashboardService.updateProgress(req.user.userId, courseId, body.progressPercent);
+  }
+
   @Get('sessions')
   async getUpcomingSessions(@Req() req: any, @Query() query: PaginationQueryDto) {
     return this.dashboardService.getUpcomingSessions(req.user.userId, query);

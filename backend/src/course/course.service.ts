@@ -69,11 +69,8 @@ export class CourseService {
     return { data: lesson, meta: null };
   }
 
-  async findCourses(query: CourseQueryDto, isPublic: boolean) {
-    const { page = 1, pageSize = 20, format, level, language, q } = query;
-    const skip = (page - 1) * pageSize;
-    const take = pageSize;
-
+  buildCourseWhereClause(query: CourseQueryDto, isPublic: boolean): Prisma.CourseWhereInput {
+    const { format, level, language, q } = query;
     const where: Prisma.CourseWhereInput = {};
 
     if (isPublic) {
@@ -90,6 +87,15 @@ export class CourseService {
         { description: { contains: q, mode: 'insensitive' } },
       ];
     }
+    return where;
+  }
+
+  async findCourses(query: CourseQueryDto, isPublic: boolean) {
+    const { page = 1, pageSize = 20 } = query;
+    const skip = (page - 1) * pageSize;
+    const take = pageSize;
+
+    const where = this.buildCourseWhereClause(query, isPublic);
 
     const [courses, total] = await Promise.all([
       this.prisma.course.findMany({

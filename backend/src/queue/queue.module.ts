@@ -5,6 +5,8 @@ import { InvoiceProcessor } from './invoice.processor.js';
 import { OrderExpiryProcessor } from './order-expiry.processor.js';
 import { PrismaModule } from '../prisma/prisma.module.js';
 import { PaymentsModule } from '../payments/payments.module.js';
+import { CertificateProcessor } from './certificate.processor.js';
+import { StorageModule } from '../storage/storage.module.js';
 
 @Module({
   imports: [
@@ -33,8 +35,12 @@ import { PaymentsModule } from '../payments/payments.module.js';
     BullModule.registerQueue({
       name: 'order-expiry',
     }),
+    BullModule.registerQueue({
+      name: 'certificates',
+    }),
+    StorageModule,
   ],
-  providers: [InvoiceProcessor, OrderExpiryProcessor],
+  providers: [InvoiceProcessor, OrderExpiryProcessor, CertificateProcessor],
   exports: [BullModule],
 })
 export class QueueModule {}

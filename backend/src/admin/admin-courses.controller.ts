@@ -7,9 +7,14 @@ import { CreateLessonDto } from '../course/dto/create-lesson.dto.js';
 import { CourseQueryDto } from '../course/dto/course-query.dto.js';
 import { Roles } from '../common/decorators/roles.decorator.js';
 import { Role } from '@prisma/client';
+import { UseGuards } from '@nestjs/common';
+import { PermissionsGuard } from '../auth/guards/permissions.guard.js';
+import { RequirePermission } from '../auth/decorators/permissions.decorator.js';
 
 @Controller('admin/courses')
-@Roles(Role.ADMIN, Role.INSTRUCTOR)
+@UseGuards(PermissionsGuard)
+@Roles(Role.ADMIN, Role.SUPERADMIN, Role.STAFF, Role.INSTRUCTOR)
+@RequirePermission('manage_courses')
 export class AdminCoursesController {
   constructor(private readonly courseService: CourseService) {}
 

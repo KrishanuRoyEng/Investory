@@ -31,4 +31,8 @@ export class CourseQueryDto {
   @IsOptional()
   @IsString()
   q?: string;
+
+  @IsOptional()
+  @IsString()
+  access_token?: string;
 }

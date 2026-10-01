@@ -9,11 +9,11 @@ export function SiteFooter() {
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="inline-block mb-4">
               <span className="text-xl font-extrabold tracking-tight text-foreground">
-                Invest<span className="text-primary">ory</span>
+                INVES<span className="text-primary">ONE</span>
               </span>
             </Link>
             <p className="text-foreground/60 text-sm max-w-sm mb-6">
-              Defying limits in modern fintech. We build tools and education platforms for the next generation of traders.
+              Building better market participants through practical education, disciplined thinking and continuous learning.
             </p>
             <div className="flex gap-4">
               <a href="#" className="text-foreground/40 hover:text-foreground transition-colors">
@@ -42,6 +42,7 @@ export function SiteFooter() {
             <ul className="space-y-3 text-sm">
               <li><Link href="/privacy" className="text-foreground/60 hover:text-primary transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms" className="text-foreground/60 hover:text-primary transition-colors">Terms of Service</Link></li>
+              <li><Link href="/faq" className="text-foreground/60 hover:text-primary transition-colors">FAQ</Link></li>
             </ul>
           </div>
         </div>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api/client';
 import { StatusBadge } from '@/components/ui/StatusBadge';
+import { useAuthStore } from '@/lib/store/auth.store';
 import { toast } from 'sonner';
 
 export default function AdminCoursesPage() {
@@ -64,12 +65,23 @@ export default function AdminCoursesPage() {
           <h1 className="text-3xl font-bold text-foreground tracking-tight">Courses</h1>
           <p className="mt-2 text-foreground/60">Manage the course catalogue.</p>
         </div>
-        <button
-          onClick={() => setIsCreateOpen(true)}
-          className="px-4 py-2 bg-primary/90 hover:bg-primary text-foreground font-medium rounded-lg transition-colors"
-        >
-          Create Course
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => {
+              const token = useAuthStore.getState().accessToken;
+              window.open(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/admin/export/courses?access_token=${token}`, '_blank');
+            }}
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-foreground font-medium rounded-lg transition-colors border border-border"
+          >
+            Export to Excel
+          </button>
+          <button
+            onClick={() => setIsCreateOpen(true)}
+            className="px-4 py-2 bg-primary/90 hover:bg-primary text-foreground font-medium rounded-lg transition-colors"
+          >
+            Create Course
+          </button>
+        </div>
       </div>
 
       {isCreateOpen && (
@@ -178,13 +190,23 @@ export default function AdminCoursesPage() {
                     <td className="px-6 py-4">
                       <StatusBadge status={course.status} />
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right space-x-3">
                       <Link 
                         href={`/admin/courses/${course.id}`}
                         className="text-primary/80 hover:text-rose-300 font-medium text-sm"
                       >
                         Edit / Curriculum
                       </Link>
+                      <button
+                        onClick={() => {
+                          const token = useAuthStore.getState().accessToken;
+                          window.open(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/admin/export/courses/${course.id}/analytics?access_token=${token}`, '_blank');
+                        }}
+                        className="text-slate-400 hover:text-slate-200 font-medium text-sm"
+                        title="Export Analytics"
+                      >
+                        Analytics
+                      </button>
                     </td>
                   </tr>
                 ))

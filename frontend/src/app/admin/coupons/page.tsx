@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api/client';
 import { RoleGuard } from '@/components/layouts/RoleGuard';
+import { useAuthStore } from '@/lib/store/auth.store';
 import { toast } from 'sonner';
 
 export default function AdminCouponsPage() {
@@ -57,19 +58,30 @@ export default function AdminCouponsPage() {
   };
 
   return (
-    <RoleGuard allowedRoles={['ADMIN']}>
+    <RoleGuard allowedRoles={['ADMIN', 'SUPERADMIN', 'STAFF']}>
       <div className="p-8">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-foreground tracking-tight">Coupons</h1>
             <p className="mt-2 text-foreground/60">Manage discount codes and promotions.</p>
           </div>
-          <button
-            onClick={() => setIsCreateOpen(true)}
-            className="px-4 py-2 bg-primary/90 hover:bg-primary text-foreground font-medium rounded-lg transition-colors"
-          >
-            Create Coupon
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => {
+                const token = useAuthStore.getState().accessToken;
+                window.open(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/admin/export/coupons?access_token=${token}`, '_blank');
+              }}
+              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-foreground font-medium rounded-lg transition-colors border border-border"
+            >
+              Export to Excel
+            </button>
+            <button
+              onClick={() => setIsCreateOpen(true)}
+              className="px-4 py-2 bg-primary/90 hover:bg-primary text-foreground font-medium rounded-lg transition-colors"
+            >
+              Create Coupon
+            </button>
+          </div>
         </div>
 
         {isCreateOpen && (

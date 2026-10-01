@@ -2,6 +2,9 @@ import { Controller, Get, Post, Param, Body, Query } from '@nestjs/common';
 import { AdminPaymentsService } from './admin-payments.service.js';
 import { Roles } from '../common/decorators/roles.decorator.js';
 import { Role, DiscountType } from '@prisma/client';
+import { UseGuards } from '@nestjs/common';
+import { PermissionsGuard } from '../auth/guards/permissions.guard.js';
+import { RequirePermission } from '../auth/decorators/permissions.decorator.js';
 import { IsString, IsEnum, IsInt, IsDateString, IsOptional, Min } from 'class-validator';
 
 export class CreateCouponDto {
@@ -24,7 +27,9 @@ export class CreateCouponDto {
 }
 
 @Controller('admin')
-@Roles(Role.ADMIN)
+@UseGuards(PermissionsGuard)
+@Roles(Role.ADMIN, Role.SUPERADMIN, Role.STAFF)
+@RequirePermission('manage_payments')
 export class AdminPaymentsController {
   constructor(private readonly adminPaymentsService: AdminPaymentsService) {}
 

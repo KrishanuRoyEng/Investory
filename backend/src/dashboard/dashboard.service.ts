@@ -6,6 +6,8 @@ import { ChangePasswordDto } from './dto/change-password.dto.js';
 import { PaginationQueryDto } from './dto/pagination-query.dto.js';
 import * as argon2 from 'argon2';
 import { PdfService } from '../payments/pdf.service.js';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class DashboardService {
@@ -13,6 +15,7 @@ export class DashboardService {
     private readonly prisma: PrismaService,
     private readonly authService: AuthService,
     private readonly pdfService: PdfService,
+    @InjectQueue('certificates') private readonly certificatesQueue: Queue,
   ) {}
 
   async updateProfile(userId: string, dto: UpdateProfileDto) {
@@ -70,6 +73,23 @@ export class DashboardService {
       data: enrollments,
       meta: { total, page, pageSize }
     };
+  }
+
+  async updateProgress(userId: string, courseId: string, progressPercent: number) {
+    if (progressPercent < 0 || progressPercent > 100) {
+      throw new BadRequestException('Progress must be between 0 and 100');
+    }
+    
+    const enrollment = await this.prisma.enrollment.update({
+      where: { userId_courseId: { userId, courseId } },
+      data: { progressPercent }
+    });
+
+    if (progressPercent === 100) {
+      await this.certificatesQueue.add('generate-certificate', { userId, courseId });
+    }
+    
+    return { data: enrollment, meta: null };
   }
 
   async getUpcomingSessions(userId: string, query: PaginationQueryDto) {

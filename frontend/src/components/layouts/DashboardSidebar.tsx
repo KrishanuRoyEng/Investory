@@ -76,6 +76,16 @@ export function DashboardSidebar() {
             </Link>
           );
         })}
+        {['ADMIN', 'SUPERADMIN', 'STAFF'].includes(user?.role as string) && (
+          <div className="pt-4 mt-2 border-t border-border/50">
+            <Link
+              href="/admin"
+              className="flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors border border-amber-500/20 bg-amber-500/10 text-amber-500 hover:bg-amber-500/20"
+            >
+              Admin Console
+            </Link>
+          </div>
+        )}
       </div>
 
       <div className="p-4 border-t border-border flex flex-col gap-4">
