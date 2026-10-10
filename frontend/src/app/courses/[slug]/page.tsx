@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: CourseDetailPageProps): Promi
   if (!data?.data) return { title: 'Course Not Found' };
   
   return {
-    title: `${data.data.title} | StockLearn`,
+    title: `${data.data.title} | Invesone`,
     description: data.data.description,
   };
 }

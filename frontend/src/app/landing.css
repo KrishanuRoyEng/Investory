@@ -1,0 +1,263 @@
+/*
+  Landing page navy/gold palette — scoped to [data-theme="landing"].
+  Does NOT override the global emerald/cyan tokens used in the authenticated app.
+  These variables intentionally shadow --primary etc. only within the landing wrapper.
+*/
+
+[data-theme="landing"] {
+  --lp-navy-deepest: #0a1628;
+  --lp-navy-deep: #0f1e3d;
+  --lp-navy-mid: #16224a;
+  --lp-navy-light: #1e2f5e;
+  --lp-navy-muted: #243672;
+
+  --lp-gold: #d4941e;
+  --lp-gold-bright: #e8a33d;
+  --lp-gold-pale: #f5c467;
+  --lp-gold-muted: rgba(212, 148, 30, 0.15);
+
+  --brand-blue: #0d7bff;
+
+  --lp-white: #ffffff;
+  --lp-white-90: rgba(255, 255, 255, 0.9);
+  --lp-white-70: rgba(255, 255, 255, 0.7);
+  --lp-white-50: rgba(255, 255, 255, 0.5);
+  --lp-white-20: rgba(255, 255, 255, 0.2);
+  --lp-white-10: rgba(255, 255, 255, 0.1);
+  --lp-white-06: rgba(255, 255, 255, 0.06);
+
+  --lp-card-bg: rgba(22, 34, 74, 0.7);
+  --lp-card-border: rgba(255, 255, 255, 0.1);
+
+  --lp-nav-height: 72px;
+}
+
+/* Sticky nav scroll shadow */
+[data-theme="landing"] .lp-nav-scrolled {
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+  background: rgba(10, 22, 40, 0.98) !important;
+}
+
+/* Dropdown animation */
+[data-theme="landing"] .lp-dropdown {
+  animation: lp-fade-down 0.15s ease-out;
+}
+
+@keyframes lp-fade-down {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Card hover lift */
+[data-theme="landing"] .lp-journey-card {
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+[data-theme="landing"] .lp-journey-card:hover {
+  border-color: var(--lp-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(212, 148, 30, 0.15);
+}
+
+/* Gold shimmer pulse on live badge */
+@keyframes lp-live-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+[data-theme="landing"] .lp-live-dot {
+  animation: lp-live-pulse 1.4s ease-in-out infinite;
+}
+
+/* Stats counter number style */
+[data-theme="landing"] .lp-stat-num {
+  background: linear-gradient(135deg, var(--lp-gold-bright), var(--lp-gold-pale));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Testimonial card shimmer border */
+[data-theme="landing"] .lp-testimonial-card {
+  background: linear-gradient(var(--lp-card-bg), var(--lp-card-bg)) padding-box,
+              linear-gradient(135deg, rgba(212, 148, 30, 0.3), rgba(255,255,255,0.05)) border-box;
+  border: 1px solid transparent;
+}
+
+/* Mentorship banner abstract motif */
+[data-theme="landing"] .lp-mentorship-banner {
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(13,123,255,0.08) 0%, transparent 40%),
+    linear-gradient(135deg, var(--lp-navy-deepest) 0%, var(--lp-navy-deep) 100%);
+  border: 1px solid rgba(255,255,255,0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="landing"] .lp-mentorship-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 50%;
+  background-image: 
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+[data-theme="landing"] .lp-mentorship-banner::after {
+  content: '';
+  position: absolute;
+  top: 20%; right: 15%;
+  width: 40px; height: 120px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  box-shadow: 
+    -60px 40px 0 -10px rgba(212, 148, 30, 0.05),
+    -60px 40px 0 -9px rgba(212, 148, 30, 0.2),
+    -120px -20px 0 -10px rgba(13, 123, 255, 0.05),
+    -120px -20px 0 -9px rgba(13, 123, 255, 0.2);
+  pointer-events: none;
+}
+
+/* Mobile menu slide */
+@keyframes lp-slide-down {
+  from { opacity: 0; max-height: 0; }
+  to   { opacity: 1; max-height: 600px; }
+}
+[data-theme="landing"] .lp-mobile-menu-open {
+  animation: lp-slide-down 0.25s ease-out;
+}
+
+/* ── Hover utilities (replace onMouseEnter/Leave in server components) ── */
+
+[data-theme="landing"] .lp-course-card-link {
+  display: block;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  background: var(--lp-card-bg);
+  border: 1px solid var(--lp-card-border);
+  backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+[data-theme="landing"] .lp-course-card-link:hover {
+  border-color: rgba(212, 148, 30, 0.4);
+  box-shadow: 0 20px 48px rgba(0,0,0,0.4);
+  transform: translateY(-4px);
+}
+[data-theme="landing"] .lp-course-card-link:hover .lp-course-enrol {
+  gap: 0.5rem;
+}
+
+[data-theme="landing"] .lp-social-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  min-width: 120px;
+  border-radius: 1rem;
+  background: var(--lp-white-06);
+  border: 1px solid var(--lp-white-10);
+  transition: border-color 0.2s, transform 0.2s;
+}
+[data-theme="landing"] .lp-social-link:hover {
+  border-color: rgba(212,148,30,0.4);
+  transform: translateY(-2px);
+}
+
+[data-theme="landing"] .lp-footer-social-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lp-white-10);
+  border: 1px solid var(--lp-white-10);
+  color: var(--lp-white-50);
+  transition: color 0.2s, border-color 0.2s;
+}
+[data-theme="landing"] .lp-footer-social-icon:hover {
+  color: var(--lp-gold-bright);
+  border-color: var(--lp-gold);
+}
+
+[data-theme="landing"] .lp-footer-link {
+  font-size: 0.875rem;
+  color: var(--lp-white-50);
+  transition: color 0.2s;
+}
+[data-theme="landing"] .lp-footer-link:hover {
+  color: var(--lp-white);
+}
+
+[data-theme="landing"] .lp-gold-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--lp-gold), var(--lp-gold-bright));
+  color: #1a0f00;
+  box-shadow: 0 4px 20px rgba(212,148,30,0.3);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+[data-theme="landing"] .lp-gold-btn:hover {
+  box-shadow: 0 6px 32px rgba(212,148,30,0.55);
+  transform: translateY(-1px);
+}
+
+[data-theme="landing"] .lp-outline-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--lp-white-20);
+  color: var(--lp-white-90);
+  transition: border-color 0.2s, color 0.2s;
+}
+[data-theme="landing"] .lp-outline-btn:hover {
+  border-color: var(--lp-gold);
+  color: var(--lp-gold-bright);
+}
+
+[data-theme="landing"] .lp-mentor-book-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem 0;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid var(--lp-gold);
+  color: var(--lp-gold-bright);
+  margin-top: 0.75rem;
+  transition: background 0.2s;
+}
+[data-theme="landing"] .lp-mentor-book-btn:hover {
+  background: var(--lp-gold-muted);
+}
+
+[data-theme="landing"] .lp-promo-enrol-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 0;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--lp-gold), var(--lp-gold-bright));
+  color: #1a0f00;
+  box-shadow: 0 4px 20px rgba(212,148,30,0.3);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+[data-theme="landing"] .lp-promo-enrol-btn:hover {
+  box-shadow: 0 6px 28px rgba(212,148,30,0.55);
+  transform: translateY(-1px);
+}

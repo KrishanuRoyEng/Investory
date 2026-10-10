@@ -6,8 +6,20 @@ const prisma = new PrismaClient();
 async function main() {
   const existingUsers = await prisma.user.count();
   if (existingUsers > 0) {
-    console.log('🌱 Database already seeded. Skipping massive seed to preserve data.\n');
-    return;
+    // Delete existing users/courses so we can re-seed idempotent
+    await prisma.doubt.deleteMany();
+    await prisma.attendance.deleteMany();
+    await prisma.certificate.deleteMany();
+    await prisma.transaction.deleteMany();
+    await prisma.orderItem.deleteMany();
+    await prisma.order.deleteMany();
+    await prisma.enrollment.deleteMany();
+    await prisma.lesson.deleteMany();
+    await prisma.courseModule.deleteMany();
+    await prisma.liveSession.deleteMany();
+    await prisma.coupon.deleteMany();
+    await prisma.course.deleteMany();
+    await prisma.user.deleteMany();
   }
 
   console.log('🌱 Seeding massive database...\n');
@@ -54,6 +66,9 @@ async function main() {
 
   // ---- Courses ----
   const coursesData = [
+    { slug: 'master-trader-programme', title: 'Master Trader Programme', description: 'Comprehensive trading programme.', pricePaise: 899900, format: CourseFormat.SELF_PACED, level: CourseLevel.ADVANCED, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600' },
+    { slug: 'masterclass-indicators-strategies', title: 'Masterclass of Indicators & Strategies', description: 'Indicators and strategies masterclass.', pricePaise: 1499900, format: CourseFormat.SELF_PACED, level: CourseLevel.INTERMEDIATE, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=600' },
+    { slug: 'mastery-derivatives-risk-management', title: 'Mastery in Derivatives Trading & Risk Management', description: 'Derivatives and risk management.', pricePaise: 1799900, format: CourseFormat.SELF_PACED, level: CourseLevel.ADVANCED, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1535320903710-d993d3d77d29?w=600' },
     { slug: 'stock-market-basics', title: 'Stock Market Basics for Beginners', description: 'Learn the fundamentals of stock markets — what are equities, how exchanges work, reading stock tickers, and placing your first paper trade. No prior knowledge required.', pricePaise: 99900, format: CourseFormat.SELF_PACED, level: CourseLevel.BEGINNER, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600' },
     { slug: 'technical-analysis-masterclass', title: 'Technical Analysis Masterclass', description: 'Master candlestick patterns, support/resistance levels, moving averages, RSI, MACD, and Bollinger Bands. Build a systematic trading strategy using technical indicators.', pricePaise: 249900, format: CourseFormat.SELF_PACED, level: CourseLevel.INTERMEDIATE, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=600' },
     { slug: 'options-trading-strategies', title: 'Options Trading Strategies', description: 'From basic calls and puts to advanced spreads, straddles, and iron condors. Learn options Greeks (delta, gamma, theta, vega) and build hedging strategies.', pricePaise: 399900, format: CourseFormat.LIVE, level: CourseLevel.ADVANCED, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1535320903710-d993d3d77d29?w=600' },
