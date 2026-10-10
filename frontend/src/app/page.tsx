@@ -31,6 +31,13 @@ import {
   Download,
   CalendarClock,
   Award,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Youtube,
+  Globe,
+  Mail,
+  Phone,
 } from 'lucide-react';
 
 const ICONS: Record<string, React.ElementType> = {
@@ -474,6 +481,79 @@ export default async function LandingPage() {
             </div>
           </section>
         )}
+
+        {/* ══ SOCIAL MEDIA ══ */}
+        <section className="py-20 px-4 lg:px-8 bg-gray-50 flex flex-col items-center justify-center border-t border-gray-200">
+          <h2 className="text-3xl font-extrabold text-[#0a1628] mb-2 text-center">Join us on social media</h2>
+          <p className="text-gray-500 mb-10 text-center">Stay updated with markets, courses & expert insights</p>
+          
+          <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+            <a href="https://www.facebook.com/profile.php?id=61594770928800" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 bg-gray-100 hover:bg-gray-200 transition-colors rounded-full py-2 px-6 pr-10 border border-gray-200 shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center text-white shrink-0">
+                <Facebook className="w-5 h-5 fill-current" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-[#0a1628] text-sm leading-tight">Facebook</span>
+                <span className="text-xs text-gray-500">@Invesone</span>
+              </div>
+            </a>
+
+            <a href="https://www.instagram.com/invesone/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 bg-gray-100 hover:bg-gray-200 transition-colors rounded-full py-2 px-6 pr-10 border border-gray-200 shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white shrink-0">
+                <Instagram className="w-5 h-5" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-[#0a1628] text-sm leading-tight">Instagram</span>
+                <span className="text-xs text-gray-500">@invesone</span>
+              </div>
+            </a>
+
+            <a href="https://www.linkedin.com/company/invesone/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 bg-gray-100 hover:bg-gray-200 transition-colors rounded-full py-2 px-6 pr-10 border border-gray-200 shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shrink-0">
+                <Linkedin className="w-5 h-5 fill-current" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-[#0a1628] text-sm leading-tight">LinkedIn</span>
+                <span className="text-xs text-gray-500">@invesone</span>
+              </div>
+            </a>
+
+            <a href="https://www.youtube.com/@Invesone.Social" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 bg-gray-100 hover:bg-gray-200 transition-colors rounded-full py-2 px-6 pr-10 border border-gray-200 shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-[#FF0000] flex items-center justify-center text-white shrink-0">
+                <Youtube className="w-5 h-5 fill-current" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-[#0a1628] text-sm leading-tight">YouTube</span>
+                <span className="text-xs text-gray-500">Subscribe For Free</span>
+              </div>
+            </a>
+            
+            <a href="https://invesone.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 bg-gray-100 hover:bg-gray-200 transition-colors rounded-full py-2 px-6 pr-10 border border-gray-200 shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-teal-600 flex items-center justify-center text-white shrink-0">
+                <Globe className="w-5 h-5" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-[#0a1628] text-sm leading-tight">Website</span>
+                <span className="text-xs text-gray-500">invesone.com</span>
+              </div>
+            </a>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-8 mt-10 text-sm font-semibold text-gray-600">
+            <a href="mailto:invesone.social@gmail.com" className="flex items-center gap-2 hover:text-[#0a1628] transition-colors">
+              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700">
+                <Mail className="w-4 h-4" />
+              </div>
+              invesone.social@gmail.com
+            </a>
+            <a href="tel:8420202193" className="flex items-center gap-2 hover:text-[#0a1628] transition-colors">
+              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700">
+                <Phone className="w-4 h-4" />
+              </div>
+              +91 8420202193
+            </a>
+          </div>
+        </section>
 
       </main>
 

@@ -16,6 +16,12 @@ export class CourseController {
 
 
   @Public()
+  @Get('categories')
+  async getCategories(@Query() query: CourseQueryDto) {
+    return this.courseService.getCategories(query);
+  }
+
+  @Public()
   @Get()
   async findCourses(@Query() query: CourseQueryDto, @Req() req: Request) {
     // If request doesn't have an admin/instructor user, it's public.

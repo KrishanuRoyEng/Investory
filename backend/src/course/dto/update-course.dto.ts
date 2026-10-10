@@ -1,5 +1,5 @@
-import { IsString, IsNotEmpty, IsInt, Min, IsEnum, Matches, IsOptional } from 'class-validator';
-import { CourseFormat, CourseLevel, CourseStatus } from '@prisma/client';
+import { IsString, IsNotEmpty, IsInt, Min, IsEnum, Matches, IsOptional, IsArray } from 'class-validator';
+import { CourseFormat, CourseLevel, CourseStatus, BannerTag } from '@prisma/client';
 
 export class UpdateCourseDto {
   @IsOptional()
@@ -45,4 +45,44 @@ export class UpdateCourseDto {
   @IsOptional()
   @IsString()
   thumbnailUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  categoryId?: string;
+
+  @IsOptional()
+  @IsEnum(BannerTag)
+  bannerTag?: BannerTag;
+
+  @IsOptional()
+  @IsString()
+  instructorId?: string;
+
+  @IsOptional()
+  @IsString()
+  instructorName?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  skills?: string[];
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  compareAtPricePaise?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  displayLearnerCount?: number;
+
+  @IsOptional()
+  @IsString()
+  brochureUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  cutoutImageUrl?: string;
 }

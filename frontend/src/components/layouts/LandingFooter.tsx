@@ -81,7 +81,6 @@ export function LandingFooter() {
           }}
         >
           <p>© {new Date().getFullYear()} {BRAND_NAME} Inc. All rights reserved.</p>
-          <p>SEBI Registration No. INH000000000 · NSE/BSE Member</p>
         </div>
       </div>
     </footer>

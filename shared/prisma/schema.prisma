@@ -28,6 +28,12 @@ enum CourseStatus {
   ARCHIVED
 }
 
+enum BannerTag {
+  LIVE
+  RECORDED
+  LIVE_AND_RECORDED
+}
+
 enum CourseLevel {
   BEGINNER
   INTERMEDIATE
@@ -82,6 +88,20 @@ model User {
   doubts       Doubt[]
   certificates Certificate[]
   liveSessions LiveSession[] @relation("InstructorSessions")
+  taughtCourses Course[]     @relation("CourseInstructor")
+}
+
+model CourseCategory {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  name      String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courses   Course[]
+
+  @@index([sortOrder])
 }
 
 model Course {
@@ -95,6 +115,19 @@ model Course {
   status      CourseStatus @default(DRAFT)
   language    String
   thumbnailUrl String?
+  
+  categoryId          String
+  category            CourseCategory @relation(fields: [categoryId], references: [id])
+  bannerTag           BannerTag?
+  instructorId        String?
+  instructor          User?           @relation("CourseInstructor", fields: [instructorId], references: [id])
+  instructorName      String?
+  skills              String[]
+  compareAtPricePaise Int?
+  displayLearnerCount Int?
+  brochureUrl         String?
+  cutoutImageUrl      String?
+
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 

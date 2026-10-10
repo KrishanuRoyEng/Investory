@@ -237,6 +237,7 @@ export interface paths {
                     format?: "SELF_PACED" | "LIVE" | "BUNDLE";
                     level?: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
                     language?: string;
+                    category?: string;
                     q?: string;
                 };
                 header?: never;
@@ -254,6 +255,50 @@ export interface paths {
                         "application/json": {
                             data?: components["schemas"]["Course"][];
                             meta?: components["schemas"]["PaginationMeta"];
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/courses/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List all course categories */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            data?: {
+                                slug?: string;
+                                name?: string;
+                                sortOrder?: number;
+                                publishedCount?: number;
+                            }[];
+                            meta?: Record<string, never> | null;
                         };
                     };
                 };
@@ -1629,6 +1674,23 @@ export interface components {
             status?: string;
             language?: string;
             thumbnailUrl?: string | null;
+            categoryId?: string;
+            category?: {
+                slug?: string;
+                name?: string;
+                sortOrder?: number;
+            } | null;
+            bannerTag?: string | null;
+            instructorId?: string | null;
+            instructorName?: string | null;
+            instructor?: {
+                name?: string;
+            } | null;
+            skills?: string[] | null;
+            compareAtPricePaise?: number | null;
+            displayLearnerCount?: number | null;
+            brochureUrl?: string | null;
+            cutoutImageUrl?: string | null;
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */

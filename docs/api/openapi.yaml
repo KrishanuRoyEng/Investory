@@ -170,6 +170,10 @@ paths:
           schema:
             type: string
         - in: query
+          name: category
+          schema:
+            type: string
+        - in: query
           name: q
           schema:
             type: string
@@ -187,6 +191,33 @@ paths:
                       $ref: '#/components/schemas/Course'
                   meta:
                     $ref: '#/components/schemas/PaginationMeta'
+  /courses/categories:
+    get:
+      summary: List all course categories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        slug:
+                          type: string
+                        name:
+                          type: string
+                        sortOrder:
+                          type: integer
+                        publishedCount:
+                          type: integer
+                  meta:
+                    type: object
+                    nullable: true
     post:
       summary: Create a draft course (Admin/Instructor)
       requestBody:
@@ -711,6 +742,50 @@ components:
         language:
           type: string
         thumbnailUrl:
+          type: string
+          nullable: true
+        categoryId:
+          type: string
+        category:
+          type: object
+          nullable: true
+          properties:
+            slug:
+              type: string
+            name:
+              type: string
+            sortOrder:
+              type: integer
+        bannerTag:
+          type: string
+          nullable: true
+        instructorId:
+          type: string
+          nullable: true
+        instructorName:
+          type: string
+          nullable: true
+        instructor:
+          type: object
+          nullable: true
+          properties:
+            name:
+              type: string
+        skills:
+          type: array
+          items:
+            type: string
+          nullable: true
+        compareAtPricePaise:
+          type: integer
+          nullable: true
+        displayLearnerCount:
+          type: integer
+          nullable: true
+        brochureUrl:
+          type: string
+          nullable: true
+        cutoutImageUrl:
           type: string
           nullable: true
         createdAt:

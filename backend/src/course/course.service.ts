@@ -70,7 +70,7 @@ export class CourseService {
   }
 
   buildCourseWhereClause(query: CourseQueryDto, isPublic: boolean): Prisma.CourseWhereInput {
-    const { format, level, language, q } = query;
+    const { format, level, language, q, category } = query;
     const where: Prisma.CourseWhereInput = {};
 
     if (isPublic) {
@@ -80,6 +80,12 @@ export class CourseService {
     if (format) where.format = format;
     if (level) where.level = level;
     if (language) where.language = language;
+    if (category) {
+      const slugs = category.split(',').map(s => s.trim()).filter(Boolean);
+      if (slugs.length > 0) {
+        where.category = { slug: { in: slugs } };
+      }
+    }
 
     if (q) {
       where.OR = [
@@ -101,8 +107,19 @@ export class CourseService {
       this.prisma.course.findMany({
         where,
         skip,
-        take,
-        orderBy: { createdAt: 'desc' },
+        take: Math.min(take, 50),
+        orderBy: [
+          { category: { sortOrder: 'asc' } },
+          { createdAt: 'desc' }
+        ],
+        include: {
+          category: {
+            select: { slug: true, name: true, sortOrder: true }
+          },
+          instructor: {
+            select: { name: true }
+          }
+        }
       }),
       this.prisma.course.count({ where }),
     ]);
@@ -155,5 +172,32 @@ export class CourseService {
 
 
     return { data: course, meta: null };
+  }
+
+  async getCategories(query: CourseQueryDto) {
+    const where = this.buildCourseWhereClause(query, true); // Public gets PUBLISHED only
+    
+    const categories = await this.prisma.courseCategory.findMany({
+      orderBy: { sortOrder: 'asc' },
+    });
+
+    const result = await Promise.all(
+      categories.map(async (cat) => {
+        const publishedCount = await this.prisma.course.count({
+          where: {
+            ...where,
+            categoryId: cat.id,
+          },
+        });
+        return {
+          slug: cat.slug,
+          name: cat.name,
+          sortOrder: cat.sortOrder,
+          publishedCount,
+        };
+      })
+    );
+
+    return { data: result, meta: null };
   }
 }

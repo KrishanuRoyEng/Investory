@@ -17,5 +17,8 @@
       "prisma",
       "unrs-resolver"
     ]
+  },
+  "devDependencies": {
+    "puppeteer": "^25.13.0"
   }
 }
