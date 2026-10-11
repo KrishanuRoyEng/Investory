@@ -2,7 +2,9 @@ import { notFound } from 'next/navigation';
 import { getApiClient } from '@/lib/api/client';
 import { CourseActionCard } from '@/components/courses/CourseActionCard';
 import { CurriculumAccordion } from '@/components/courses/CurriculumAccordion';
-import { SiteHeader } from '@/components/layouts/SiteHeader';
+import { LandingNav } from '@/components/layouts/LandingNav';
+import { LandingFooter } from '@/components/layouts/LandingFooter';
+import '@/app/landing.css';
 import { BookOpen, BarChart, Globe } from 'lucide-react';
 import { Metadata } from 'next';
 
@@ -21,7 +23,7 @@ export async function generateMetadata({ params }: CourseDetailPageProps): Promi
   if (!data?.data) return { title: 'Course Not Found' };
   
   return {
-    title: `${data.data.title} | Invesone`,
+    title: `${data.data.title} | INVESONE`,
     description: data.data.description,
   };
 }
@@ -49,10 +51,10 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   const gradientClass = gradientPresets[charCode % gradientPresets.length];
 
   return (
-    <div className="min-h-screen bg-background text-slate-200 selection:bg-emerald-500/30">
-      <SiteHeader />
+    <div data-theme="landing" className="min-h-screen bg-[#f8fafc] text-gray-900 flex flex-col font-sans">
+      <LandingNav />
       {/* Hero Section */}
-      <div className="relative border-b border-border">
+      <div className="relative bg-[var(--lp-navy-deepest)] text-white border-b border-white/10">
         <div className={`absolute inset-0 bg-gradient-to-br ${gradientClass} opacity-30 -z-10`} />
         {course.thumbnailUrl && (
           <div 
@@ -60,56 +62,56 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             style={{ backgroundImage: `url(${course.thumbnailUrl})` }}
           />
         )}
-        <div className="absolute inset-0 bg-background/80 -z-10" />
+        <div className="absolute inset-0 bg-[var(--lp-navy-deepest)]/80 -z-10" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
           <div className="max-w-3xl">
             <div className="flex flex-wrap items-center gap-3 mb-6">
-              <span className="px-3 py-1 text-sm font-semibold rounded-full bg-primary/10 text-primary border border-emerald-500/20">
+              <span className="px-3 py-1 text-xs font-bold uppercase rounded-full bg-[rgba(212,148,30,0.15)] text-[var(--lp-gold-bright)] border border-[rgba(212,148,30,0.3)]">
                 {course.format.replace('_', ' ')}
               </span>
-              <span className="flex items-center gap-1.5 px-3 py-1 text-sm font-medium rounded-full bg-surface/80 text-foreground/80">
-                <BarChart className="w-4 h-4" />
+              <span className="flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-white/10 text-white/90">
+                <BarChart className="w-3.5 h-3.5" />
                 {course.level}
               </span>
-              <span className="flex items-center gap-1.5 px-3 py-1 text-sm font-medium rounded-full bg-surface/80 text-foreground/80">
-                <Globe className="w-4 h-4" />
+              <span className="flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-white/10 text-white/90">
+                <Globe className="w-3.5 h-3.5" />
                 {course.language}
               </span>
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
+            <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
               {course.title}
             </h1>
             
-            <p className="text-xl text-foreground/80 leading-relaxed max-w-2xl">
+            <p className="text-lg text-white/80 leading-relaxed max-w-2xl">
               {course.description}
             </p>
           </div>
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Content Area */}
           <div className="lg:col-span-2 space-y-12">
             
             {/* About Section */}
-            <section>
-              <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
-                <BookOpen className="w-6 h-6 text-primary" />
+            <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+              <h2 className="text-2xl font-bold text-[#0f172a] mb-6 flex items-center gap-2">
+                <BookOpen className="w-6 h-6 text-[var(--brand-blue)]" />
                 About this course
               </h2>
-              <div className="prose prose-invert prose-slate max-w-none">
-                <p className="text-foreground/80 whitespace-pre-wrap leading-relaxed">
+              <div className="prose text-gray-700 max-w-none text-sm leading-relaxed">
+                <p className="whitespace-pre-wrap">
                   {course.description}
                 </p>
               </div>
             </section>
 
             {/* Curriculum Section */}
-            <section id="curriculum">
-              <h2 className="text-2xl font-bold text-foreground mb-6">
+            <section id="curriculum" className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+              <h2 className="text-2xl font-bold text-[#0f172a] mb-6">
                 Curriculum Overview
               </h2>
               <CurriculumAccordion modules={course.modules || []} />
@@ -122,6 +124,8 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
           </div>
         </div>
       </main>
+
+      <LandingFooter />
     </div>
   );
 }

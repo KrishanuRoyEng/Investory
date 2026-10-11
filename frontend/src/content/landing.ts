@@ -197,16 +197,13 @@ export const FEATURED_COURSES = [
 // ---------------------------------------------------------------------------
 export const NAV_COURSES_DROPDOWN = [
   { label: 'Beginner', href: '/courses?level=BEGINNER' },
-  { label: 'Indicators', href: '/courses?category=indicators' }, // TODO(stub-route): category filter does not exist yet
-  { label: 'Derivatives', href: '/courses?category=derivatives' }, // TODO(stub-route)
-  { label: 'NISM Exam Prep', href: '/courses?category=nism' },    // TODO(stub-route)
-  { label: 'Recorded Courses', href: '/courses?format=SELF_PACED' },
+  { label: 'Advanced', href: '/courses?level=ADVANCED' },
 ] as const;
 
 export const NAV_LINKS = [
-  { label: 'Personal Mentorship', href: '/mentorship' }, // TODO(stub-route): page does not exist
+  { label: 'Personal Mentorship', href: '/coming-soon' },
   { label: 'OneLearn', href: '/courses' },
-  { label: 'Market Insights', href: '/market-insights' }, // TODO(stub-route): page does not exist
+  { label: 'Market Insights', href: '/coming-soon' },
 ] as const;
 
 export const NAV_SEARCH_PLACEHOLDER = 'Search options, indicators, NISM exams and more';
@@ -230,6 +227,7 @@ export const FOOTER_COLS = [
     label: 'Company',
     links: [
       { label: 'About Us', href: '/about' },
+      { label: 'Our Mission', href: '/financial-literacy' },
       { label: 'Blog', href: '#' },
       { label: 'Careers', href: '#' },
     ],
@@ -240,6 +238,7 @@ export const FOOTER_COLS = [
       { label: 'FAQ', href: '/faq' },
       { label: 'Privacy Policy', href: '/privacy' },
       { label: 'Terms of Service', href: '/terms' },
+      { label: 'Grievance Redressal', href: '/grievance-policy' },
     ],
   },
 ] as const;

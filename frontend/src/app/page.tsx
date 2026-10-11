@@ -58,17 +58,34 @@ export const metadata: Metadata = {
   description: siteConfig.description,
 };
 
+export const dynamic = 'force-dynamic';
+
+const DEFAULT_PRICES: Record<string, number> = {
+  'master-trader-programme': 8999,
+  'masterclass-indicators-strategies': 14999,
+  'mastery-derivatives-risk-management': 17999,
+};
+
 async function fetchCoursePrice(slug: string): Promise<number | null> {
+  const fallback = DEFAULT_PRICES[slug] ?? null;
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
-    const res = await fetch(`${baseUrl}/courses/${slug}`, { next: { revalidate: 60 } });
-    if (!res.ok) return null;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+
+    const res = await fetch(`${baseUrl}/courses/${slug}`, {
+      signal: controller.signal,
+      next: { revalidate: 60 },
+    });
+    clearTimeout(timeoutId);
+
+    if (!res.ok) return fallback;
     const body = await res.json();
     const course = body.data || body;
-    if (course.status !== 'PUBLISHED') return null;
+    if (course.status !== 'PUBLISHED') return fallback;
     return Math.floor(course.pricePaise / 100);
   } catch (err) {
-    return null;
+    return fallback;
   }
 }
 
@@ -147,10 +164,10 @@ export default async function LandingPage() {
               {/* Right — promo carousel */}
               <div className="flex flex-col items-center xl:items-end justify-center h-full w-full">
                 <HeroCarousel items={[{
-                  label: "Multi-Asset Trading Mentorship Program",
-                  title: "Trade Every Market.",
-                  instructorName: "Vivek Bajaj",
-                  href: PROMO_CARD.href
+                  label: "Master Trader Programme",
+                  title: "Trade with Clarity & Discipline",
+                  instructorName: "INVESONE Faculty",
+                  href: "/courses/master-trader-programme"
                 }]} />
               </div>
 
@@ -184,15 +201,13 @@ export default async function LandingPage() {
             </Link>
             <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200">
               <div className="grid grid-cols-1 md:grid-cols-2">
-                <div className="relative min-h-[320px] md:min-h-0 bg-gray-100 flex items-center justify-center overflow-hidden">
-                  {ASSETS.facultyTeam.filled ? (
-                    <Image src={ASSETS.facultyTeam.path} alt={ASSETS.facultyTeam.alt} fill className="object-cover" />
-                  ) : (
-                    <div className="text-center p-8 text-gray-400">
-                      <Users className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                      <p>Faculty Team Photo Placeholder</p>
-                    </div>
-                  )}
+                <div className="relative min-h-[320px] md:min-h-0 bg-[#0a1628] flex items-center justify-center overflow-hidden">
+                  <Image 
+                    src="/brand/master-trader-programme.jpg" 
+                    alt="Master Trader Programme - INVESONE" 
+                    fill 
+                    className="object-cover" 
+                  />
                 </div>
                 
                 <div className="p-10 lg:p-14 flex flex-col justify-center">
@@ -307,7 +322,15 @@ export default async function LandingPage() {
                       </div>
 
                       <div className="absolute right-0 bottom-0 w-1/3 h-full flex items-end justify-end">
-                        {ASSETS.instructorCutoutJayanta.filled ? (
+                        {course.slug === 'mastery-derivatives-risk-management' ? (
+                          <div className="relative w-24 h-32">
+                            <Image src="/brand/mastery-derivatives.jpg" alt="Mastery in Derivatives" fill className="object-cover object-top" />
+                          </div>
+                        ) : course.slug === 'master-trader-programme' ? (
+                          <div className="relative w-24 h-32">
+                            <Image src="/brand/master-trader-programme.jpg" alt="Master Trader Programme" fill className="object-cover object-top" />
+                          </div>
+                        ) : ASSETS.instructorCutoutJayanta.filled ? (
                           <div className="relative w-24 h-32">
                              <Image src={ASSETS.instructorCutoutJayanta.path} alt={ASSETS.instructorCutoutJayanta.alt} fill className="object-cover object-bottom" />
                           </div>
@@ -519,8 +542,14 @@ export default async function LandingPage() {
             </a>
 
             <a href="https://www.youtube.com/@Invesone.Social" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 bg-gray-100 hover:bg-gray-200 transition-colors rounded-full py-2 px-6 pr-10 border border-gray-200 shadow-sm">
-              <div className="w-10 h-10 rounded-full bg-[#FF0000] flex items-center justify-center text-white shrink-0">
-                <Youtube className="w-5 h-5 fill-current" />
+              <div className="w-10 h-10 rounded-full bg-[#FF0000] flex items-center justify-center shrink-0 shadow-sm">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77 1.56.42 7.81.42 7.81.42s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77.42-1.56.42-4.81.42-4.81s0-3.25-.42-4.81z"
+                    fill="#FFFFFF"
+                  />
+                  <polygon points="10,15 15.4,12 10,9" fill="#FF0000" />
+                </svg>
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-[#0a1628] text-sm leading-tight">YouTube</span>

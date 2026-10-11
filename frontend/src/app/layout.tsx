@@ -38,6 +38,11 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: ['/brand/og-image.png'],
   },
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+  },
 };
 
 export default function RootLayout({

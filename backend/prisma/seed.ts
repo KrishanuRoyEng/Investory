@@ -1,4 +1,4 @@
-import { PrismaClient, Role, CourseFormat, CourseLevel, CourseStatus, OrderStatus, TransactionStatus, LiveSessionType, LiveSessionStatus, DiscountType, DoubtStatus } from '@prisma/client';
+import { PrismaClient, Role, CourseFormat, CourseLevel, CourseStatus, OrderStatus, TransactionStatus, LiveSessionType, LiveSessionStatus, DiscountType, DoubtStatus, BannerTag } from '@prisma/client';
 import * as argon2 from 'argon2';
 
 const prisma = new PrismaClient();
@@ -80,21 +80,57 @@ async function main() {
 
   // ---- Courses ----
   const coursesData = [
-    { categoryId: categories['derivatives'].id, slug: 'master-trader-programme', title: 'Master Trader Programme', description: 'Comprehensive trading programme.', pricePaise: 899900, format: CourseFormat.SELF_PACED, level: CourseLevel.ADVANCED, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600' },
-    { categoryId: categories['indicators'].id, slug: 'masterclass-indicators-strategies', title: 'Masterclass of Indicators & Strategies', description: 'Indicators and strategies masterclass.', pricePaise: 1499900, format: CourseFormat.SELF_PACED, level: CourseLevel.INTERMEDIATE, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=600' },
-    { categoryId: categories['derivatives'].id, slug: 'mastery-derivatives-risk-management', title: 'Mastery in Derivatives Trading & Risk Management', description: 'Derivatives and risk management.', pricePaise: 1799900, format: CourseFormat.SELF_PACED, level: CourseLevel.ADVANCED, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1535320903710-d993d3d77d29?w=600' },
-    { categoryId: categories['beginner'].id, slug: 'stock-market-basics', title: 'Stock Market Basics for Beginners', description: 'Learn the fundamentals of stock markets — what are equities, how exchanges work, reading stock tickers, and placing your first paper trade. No prior knowledge required.', pricePaise: 99900, format: CourseFormat.SELF_PACED, level: CourseLevel.BEGINNER, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600' },
-    { categoryId: categories['indicators'].id, slug: 'technical-analysis-masterclass', title: 'Technical Analysis Masterclass', description: 'Master candlestick patterns, support/resistance levels, moving averages, RSI, MACD, and Bollinger Bands. Build a systematic trading strategy using technical indicators.', pricePaise: 249900, format: CourseFormat.SELF_PACED, level: CourseLevel.INTERMEDIATE, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=600' },
-    { categoryId: categories['derivatives'].id, slug: 'options-trading-strategies', title: 'Options Trading Strategies', description: 'From basic calls and puts to advanced spreads, straddles, and iron condors. Learn options Greeks (delta, gamma, theta, vega) and build hedging strategies.', pricePaise: 399900, format: CourseFormat.LIVE, level: CourseLevel.ADVANCED, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1535320903710-d993d3d77d29?w=600' },
-    { categoryId: categories['beginner'].id, slug: 'fundamental-analysis-deep-dive', title: 'Fundamental Analysis Deep Dive', description: 'Learn to read balance sheets, income statements, and cash flow statements. Understand valuation ratios like P/E, P/B, EV/EBITDA, and DCF modeling.', pricePaise: 199900, format: CourseFormat.SELF_PACED, level: CourseLevel.INTERMEDIATE, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600' },
-    { categoryId: categories['indicators'].id, slug: 'intraday-trading-bootcamp', title: 'Intraday Trading Bootcamp', description: 'Scalping, momentum trading, and gap strategies for Indian markets. Learn order flow analysis, VWAP, and time-based entry/exit rules for NSE/BSE.', pricePaise: 349900, format: CourseFormat.LIVE, level: CourseLevel.ADVANCED, language: 'Hindi', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=600' },
-    { categoryId: categories['beginner'].id, slug: 'mutual-funds-made-simple', title: 'Mutual Funds Made Simple', description: 'SIP vs lumpsum, direct vs regular plans, equity vs debt funds, ELSS for tax saving, and building a goal-based portfolio. Ideal for salaried professionals.', pricePaise: 49900, format: CourseFormat.SELF_PACED, level: CourseLevel.BEGINNER, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?w=600' },
-    { categoryId: categories['derivatives'].id, slug: 'commodity-trading-essentials', title: 'Commodity Trading Essentials', description: 'Trade gold, silver, crude oil, and agricultural commodities on MCX. Understand contango, backwardation, and seasonal commodity cycles.', pricePaise: 149900, format: CourseFormat.SELF_PACED, level: CourseLevel.INTERMEDIATE, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1624365168968-f283d506c6b6?w=600' },
-    { categoryId: categories['beginner'].id, slug: 'forex-trading-for-india', title: 'Forex Trading for Indian Traders', description: 'USD/INR, EUR/INR currency pairs, RBI regulations, carry trade basics, and risk management for forex trading within Indian regulatory framework.', pricePaise: 179900, format: CourseFormat.SELF_PACED, level: CourseLevel.INTERMEDIATE, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=600' },
-    { categoryId: categories['beginner'].id, slug: 'ipo-investing-guide', title: 'IPO Investing Guide', description: 'How to evaluate IPOs, read DRHP documents, grey market premium analysis, and allocation strategies. Real case studies from recent Indian IPOs.', pricePaise: 79900, format: CourseFormat.SELF_PACED, level: CourseLevel.BEGINNER, language: 'Hindi', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600' },
-    { categoryId: categories['derivatives'].id, slug: 'portfolio-management-pro', title: 'Portfolio Management Pro Bundle', description: 'Complete bundle: asset allocation, rebalancing, risk-adjusted returns (Sharpe, Sortino), and tax-loss harvesting for the serious retail investor.', pricePaise: 599900, format: CourseFormat.BUNDLE, level: CourseLevel.ADVANCED, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600' },
-    { categoryId: categories['beginner'].id, slug: 'crypto-trading-basics', title: 'Crypto Trading Basics', description: 'Understand blockchain, wallets, CEX vs DEX, and trading Bitcoin, Ethereum, and Altcoins safely.', pricePaise: 129900, format: CourseFormat.SELF_PACED, level: CourseLevel.BEGINNER, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=600' },
-    { categoryId: categories['indicators'].id, slug: 'algorithmic-trading-python', title: 'Algorithmic Trading with Python', description: 'Automate your trading strategies using Python, Pandas, and broker APIs. Requires basic programming knowledge.', pricePaise: 899900, format: CourseFormat.LIVE, level: CourseLevel.ADVANCED, language: 'English', status: CourseStatus.PUBLISHED, thumbnailUrl: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=600' },
+    {
+      categoryId: categories['beginner'].id,
+      slug: 'master-trader-programme',
+      title: 'Master Trader Programme',
+      description: 'A structured, mentor-led learning experience that builds your understanding of technical and fundamental analysis—from reading price action and chart patterns to evaluating company financials, with a focus on analytical thinking, risk awareness, and disciplined decision-making.',
+      pricePaise: 899900,
+      compareAtPricePaise: 1499900,
+      format: CourseFormat.SELF_PACED,
+      level: CourseLevel.BEGINNER,
+      language: 'English',
+      status: CourseStatus.PUBLISHED,
+      thumbnailUrl: '/brand/master-trader-programme.jpg',
+      instructorName: 'Jayanta Sarkar',
+      displayLearnerCount: 1500,
+      skills: ['Price Action', 'Chart Patterns', 'Risk Management', 'Fundamental Analysis'],
+      bannerTag: BannerTag.FEATURED,
+    },
+    {
+      categoryId: categories['indicators'].id,
+      slug: 'masterclass-indicators-strategies',
+      title: 'Masterclass of Indicators & Strategies',
+      description: 'Indicators and strategies masterclass. Learn RSI, Fibonacci analysis, pivot levels, Ichimoku, and indicator confluence with live examples.',
+      pricePaise: 1499900,
+      compareAtPricePaise: 1999900,
+      format: CourseFormat.SELF_PACED,
+      level: CourseLevel.INTERMEDIATE,
+      language: 'English',
+      status: CourseStatus.PUBLISHED,
+      thumbnailUrl: 'https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=600',
+      instructorName: 'Jayanta Sarkar',
+      displayLearnerCount: 1000,
+      skills: ['RSI Strategies', 'Fibonacci Analysis', 'Pivot Levels', 'Ichimoku'],
+      bannerTag: BannerTag.TRENDING,
+    },
+    {
+      categoryId: categories['derivatives'].id,
+      slug: 'mastery-derivatives-risk-management',
+      title: 'Mastery in Derivatives Trading & Risk Management',
+      description: 'Derivatives and risk management masterclass. Futures & options mechanics, Option Greeks, hedging strategies, and disciplined capital management.',
+      pricePaise: 1799900,
+      compareAtPricePaise: 2499900,
+      format: CourseFormat.SELF_PACED,
+      level: CourseLevel.ADVANCED,
+      language: 'English',
+      status: CourseStatus.PUBLISHED,
+      thumbnailUrl: '/brand/mastery-derivatives.jpg',
+      instructorName: 'Jayanta Sarkar',
+      displayLearnerCount: 1000,
+      skills: ['Futures & Options', 'Option Greeks', 'Hedging', 'Risk Management'],
+      bannerTag: BannerTag.POPULAR,
+    },
   ];
 
   const courses = [];
@@ -128,7 +164,7 @@ async function main() {
   // ---- Enrollments, Orders, Transactions, Certificates ----
   // Give each learner 3 to 6 random courses
   for (const learner of learners) {
-    const numEnrollments = 3 + Math.floor(Math.random() * 4);
+    const numEnrollments = Math.min(courses.length, 1 + Math.floor(Math.random() * 3));
     const shuffledCourses = [...courses].sort(() => 0.5 - Math.random());
     const enrolledCourses = shuffledCourses.slice(0, numEnrollments);
 

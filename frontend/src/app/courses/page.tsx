@@ -6,11 +6,12 @@ import { LandingFooter } from '@/components/layouts/LandingFooter';
 import { MentorshipBanner } from '@/components/landing/MentorshipBanner';
 import { ScholarshipBanner } from '@/components/landing/ScholarshipBanner';
 import { CourseCard } from '@/components/landing/CourseCard';
+import { BeginnerCourseView } from '@/components/courses/BeginnerCourseView';
 import { CourseFiltersSidebar } from './CourseFiltersSidebar';
 
 export const metadata: Metadata = {
-  title: 'Course Catalogue | StockLearn',
-  description: 'Browse our complete catalog of stock market courses.',
+  title: 'Course Catalogue | INVESONE',
+  description: 'Browse our complete catalog of capital-market courses, technical analysis, and NISM preparation.',
 };
 
 export default async function CoursesPage({
@@ -18,10 +19,26 @@ export default async function CoursesPage({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const level = typeof searchParams.level === 'string' ? searchParams.level : undefined;
+
+  // Render the custom Beginner Course Page when level === 'BEGINNER'
+  if (level === 'BEGINNER') {
+    return (
+      <div data-theme="landing" className="min-h-screen flex flex-col font-sans">
+        <LandingNav />
+        <main className="flex-1">
+          <BeginnerCourseView />
+        </main>
+        <LandingFooter />
+      </div>
+    );
+  }
+
   const page = typeof searchParams.page === 'string' ? parseInt(searchParams.page, 10) : 1;
   const pageSize = typeof searchParams.pageSize === 'string' ? parseInt(searchParams.pageSize, 10) : 50;
   const format = typeof searchParams.format === 'string' ? searchParams.format : undefined;
-  const level = typeof searchParams.level === 'string' ? searchParams.level : undefined;
+  // All courses should show up in advanced route as specified by client
+  const filterLevel = level === 'ADVANCED' ? undefined : (level as any);
   const language = typeof searchParams.language === 'string' ? searchParams.language : undefined;
   const q = typeof searchParams.q === 'string' ? searchParams.q : undefined;
   const category = typeof searchParams.category === 'string' ? searchParams.category : undefined;
@@ -35,7 +52,7 @@ export default async function CoursesPage({
           page,
           pageSize,
           format: format as any,
-          level: level as any,
+          level: filterLevel,
           language,
           q,
           category,

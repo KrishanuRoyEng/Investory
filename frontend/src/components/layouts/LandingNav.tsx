@@ -6,8 +6,7 @@ import { Search, ChevronDown, Phone, Menu, X, Dot } from 'lucide-react';
 import Image from 'next/image';
 import { ASSETS } from '@/content/assets';
 import { BRAND_NAME, NAV_COURSES_DROPDOWN, NAV_LINKS, NAV_SEARCH_PLACEHOLDER } from '@/content/landing';
-
-
+import { LeadGenModal } from '@/components/common/LeadGenModal';
 
 export function LandingNav() {
   const [scrolled, setScrolled] = useState(false);
@@ -77,8 +76,15 @@ export function LandingNav() {
 
   return (
     <>
+      <LeadGenModal />
       <div className="bg-[#1a0f00] text-[#ff9900] text-xs md:text-sm font-semibold py-2 px-4 text-center">
-        Are you trading wrong? <span className="text-white">What separates consistent traders from the rest?</span> <a href="#" className="underline hover:text-white transition-colors ml-1">Fill the Form To Know More</a>
+        Are you trading wrong? <span className="text-white">What separates consistent traders from the rest?</span>{' '}
+        <button
+          onClick={() => window.dispatchEvent(new Event('open-lead-modal'))}
+          className="underline hover:text-white transition-colors ml-1 font-semibold cursor-pointer"
+        >
+          Fill the Form To Know More
+        </button>
       </div>
       <nav
         className={`sticky top-0 z-50 transition-all duration-300 bg-white shadow-sm border-b border-gray-200`}
@@ -102,15 +108,25 @@ export function LandingNav() {
           </span>
         </Link>
 
-        {/* 2. Search bar — ~10-15% narrower to fit 5 nav items */}
-        <div className="hidden lg:flex flex-1 max-w-[280px] relative ml-2 mr-4">
+        {/* 2. Search bar — routes to /courses on submit */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const input = (e.currentTarget.elements.namedItem('navSearch') as HTMLInputElement)?.value;
+            window.location.href = input ? `/courses?q=${encodeURIComponent(input)}` : '/courses';
+          }}
+          className="hidden lg:flex flex-1 max-w-[280px] relative ml-2 mr-4"
+        >
           <input
+            name="navSearch"
             type="search"
             placeholder={NAV_SEARCH_PLACEHOLDER}
             className="w-full text-xs py-2 pl-4 pr-10 rounded-full outline-none transition-all bg-white border border-gray-300 text-gray-900 focus:border-[var(--brand-blue)] focus:ring-1 focus:ring-[var(--brand-blue)]"
           />
-          <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-        </div>
+          <button type="submit" aria-label="Search" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+            <Search className="w-4 h-4" />
+          </button>
+        </form>
 
         {/* Desktop Nav links */}
         <div className="hidden lg:flex items-center gap-0.5 flex-1">
@@ -127,14 +143,17 @@ export function LandingNav() {
 
             {coursesOpen && (
               <div
-                className="lp-dropdown absolute top-full left-0 mt-2 w-52 rounded-xl overflow-hidden z-50 bg-white border border-gray-100 shadow-xl"
+                className="lp-dropdown absolute top-full left-0 mt-2 w-56 rounded-xl overflow-hidden z-50 bg-white border border-gray-100 shadow-xl py-2"
               >
+                <div className="px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                  Browse Course by Level
+                </div>
                 {NAV_COURSES_DROPDOWN.map(item => (
                   <Link
                     key={item.label}
                     href={item.href}
                     onClick={() => setCoursesOpen(false)}
-                    className="block px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-[var(--brand-blue)] transition-colors"
+                    className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[var(--brand-blue)] transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -162,7 +181,7 @@ export function LandingNav() {
                 Live
               </span>
             )}
-            <NavLink href="/live">Live Events</NavLink>
+            <NavLink href="/coming-soon">Live Events</NavLink>
           </div>
 
         </div>
@@ -173,18 +192,18 @@ export function LandingNav() {
           {/* 8. Divider */}
           <div className="w-px h-6 bg-gray-200" />
 
-          {/* 9. Speak with Us */}
-          <a
-            href="tel:+918000000000"
+          {/* 9. Speak with Us / Contact */}
+          <Link
+            href="/contact"
             className="flex items-center gap-1.5 text-sm font-semibold text-[var(--brand-blue)] hover:text-blue-700 transition-colors mr-2"
           >
             <Phone className="w-4 h-4" />
             Talk To Us
-          </a>
+          </Link>
 
           {/* 10. Login */}
           <Link
-            href="/login"
+            href="/coming-soon"
             className="px-5 py-2 rounded text-sm font-semibold border border-[var(--brand-blue)] text-[var(--brand-blue)] hover:bg-blue-50 transition-colors"
           >
             Login
@@ -192,7 +211,7 @@ export function LandingNav() {
 
           {/* 11. Sign up */}
           <Link
-            href="/signup"
+            href="/coming-soon"
             className="px-5 py-2 rounded text-sm font-semibold bg-[var(--brand-blue)] text-white hover:bg-blue-600 transition-colors shadow-sm"
           >
             Sign up
@@ -235,23 +254,23 @@ export function LandingNav() {
                 {link.label}
               </MobileNavLink>
             ))}
-            <MobileNavLink href="/live" onClick={() => setMobileOpen(false)}>
+            <MobileNavLink href="/coming-soon" onClick={() => setMobileOpen(false)}>
               Live Workshop {isLive && (
                 <span className="ml-2 px-1.5 py-0.5 text-[9px] font-bold rounded bg-red-100 text-red-600">Live</span>
               )}
             </MobileNavLink>
-            <MobileNavLink href="tel:+918000000000" onClick={() => setMobileOpen(false)}>📞 Talk To Us</MobileNavLink>
+            <MobileNavLink href="/contact" onClick={() => setMobileOpen(false)}>📞 Talk To Us</MobileNavLink>
 
             <div className="pt-4 flex flex-col gap-3">
               <Link
-                href="/login"
+                href="/coming-soon"
                 onClick={() => setMobileOpen(false)}
                 className="w-full py-3 rounded-lg text-center text-sm font-semibold border border-[var(--brand-blue)] text-[var(--brand-blue)]"
               >
                 Login
               </Link>
               <Link
-                href="/signup"
+                href="/coming-soon"
                 onClick={() => setMobileOpen(false)}
                 className="w-full py-3 rounded-lg text-center text-sm font-semibold bg-[var(--brand-blue)] text-white"
               >

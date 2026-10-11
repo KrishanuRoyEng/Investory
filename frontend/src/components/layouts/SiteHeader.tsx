@@ -61,13 +61,13 @@ export function SiteHeader() {
           ) : (
             <>
               <Link 
-                href="/login" 
+                href="/coming-soon" 
                 className="hidden md:block px-3 py-2 rounded-md text-sm font-medium text-foreground/70 hover:text-foreground hover:bg-foreground/5 transition-colors"
               >
                 Sign In
               </Link>
               <Link 
-                href="/signup" 
+                href="/coming-soon" 
                 className="px-5 py-2.5 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-xl transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40"
               >
                 Get Started

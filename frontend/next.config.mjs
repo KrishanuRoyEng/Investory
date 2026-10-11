@@ -11,6 +11,7 @@ const nextConfig = {
     // your project has type errors.
     ignoreBuildErrors: true,
   },
+  staticPageGenerationTimeout: 120,
 };
 
 export default nextConfig;

@@ -43,7 +43,15 @@ export function CourseCard({ course }: CourseCardProps) {
         </div>
 
         <div className="absolute right-0 bottom-0 w-1/3 h-full flex items-end justify-end">
-          {course.cutoutImageUrl ? (
+          {course.slug === 'master-trader-programme' ? (
+            <div className="relative w-24 h-32">
+              <Image src="/brand/master-trader-programme.jpg" alt="Master Trader Programme" fill className="object-cover object-top" />
+            </div>
+          ) : course.slug === 'mastery-derivatives-risk-management' ? (
+            <div className="relative w-24 h-32">
+              <Image src="/brand/mastery-derivatives.jpg" alt="Mastery in Derivatives" fill className="object-cover object-top" />
+            </div>
+          ) : course.cutoutImageUrl ? (
             <div className="relative w-24 h-32">
                <Image src={course.cutoutImageUrl} alt="Instructor" fill className="object-cover object-bottom" />
             </div>

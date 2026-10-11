@@ -42,17 +42,21 @@ export const siteConfig = {
    * See docs/open-stubs.md §L-SOCIAL.
    */
   social: {
-    youtube: null as string | null,
-    instagram: null as string | null,
-    twitter: null as string | null,
-    linkedin: null as string | null,
+    youtube: 'https://www.youtube.com/@Invesone.Social',
+    instagram: 'https://www.instagram.com/invesone/',
+    facebook: 'https://www.facebook.com/profile.php?id=61594770928800',
+    linkedin: 'https://www.linkedin.com/company/invesone/',
+    twitter: 'https://x.com/invesone',
   },
+
+  email: 'invesone.social@gmail.com',
+  phone: '+91 8420202193',
 
   /** OG image — from /public/brand/ slot */
   ogImage: '/brand/og-image.png',
 
   /** Favicon path */
-  favicon: '/brand/favicon.ico',
+  favicon: '/icon.png',
 } as const;
 
 export type SiteConfig = typeof siteConfig;

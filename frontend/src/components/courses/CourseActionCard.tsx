@@ -44,13 +44,7 @@ export function CourseActionCard({ courseId, courseSlug, pricePaise }: CourseAct
   const isEnrolled = dashboardData?.some((enrollment: { courseId: string }) => enrollment.courseId === courseId);
 
   const handleAction = () => {
-    if (status !== 'authenticated') {
-      router.push(`/login?redirect=${pathname}`);
-    } else if (isEnrolled) {
-      router.push(`/dashboard/courses/${courseId}`); // Assuming dashboard handles courseId or we have a player
-    } else {
-      router.push(`/checkout?slug=${courseSlug}`);
-    }
+    router.push('/coming-soon');
   };
 
   const isLoading = status === 'idle' || status === 'loading' || (status === 'authenticated' && isCheckingEnrollment);
