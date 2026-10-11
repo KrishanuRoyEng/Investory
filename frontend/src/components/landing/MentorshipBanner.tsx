@@ -63,21 +63,14 @@ export function MentorshipBanner() {
             </Link>
           </div>
 
-          <div className="relative min-h-[400px] lg:min-h-0 flex items-end justify-center lg:justify-end px-10 pt-10">
-            {ASSETS.instructorCutoutJayanta.filled ? (
-              <div className="relative w-[300px] h-[400px] z-10">
-                <Image src={ASSETS.instructorCutoutJayanta.path} alt={ASSETS.instructorCutoutJayanta.alt} fill className="object-cover object-bottom" />
-              </div>
-            ) : (
-              <div className="w-48 h-64 bg-[rgba(255,255,255,0.05)] rounded-t-[100px] flex items-center justify-center relative z-10 border border-[rgba(255,255,255,0.1)] border-b-0">
-                <Users className="w-16 h-16 text-[rgba(255,255,255,0.2)]" />
-                <span className="absolute bottom-4 text-xs text-[rgba(255,255,255,0.3)]">Placeholder</span>
-              </div>
-            )}
-            
-            <div className="absolute bottom-6 right-6 lg:bottom-10 lg:right-10 z-20 text-right">
-              <p className="text-xl font-bold text-white shadow-sm">{MENTORSHIP_BANNER.mentorName}</p>
-              <p className="text-sm text-[var(--lp-gold-bright)] font-medium shadow-sm">{MENTORSHIP_BANNER.mentorTitle}</p>
+          <div className="relative min-h-[380px] lg:min-h-0 flex items-center justify-center lg:justify-end px-6 lg:px-12 py-8">
+            <div className="relative w-full max-w-[340px] aspect-square rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 group bg-slate-900/60">
+              <Image 
+                src="/brand/mastery-derivatives.jpg" 
+                alt="Jayanta Sarkar - Personal Mentorship by INVESONE" 
+                fill 
+                className="object-cover transition-transform duration-500 group-hover:scale-105" 
+              />
             </div>
           </div>
         </div>

@@ -1,9 +1,11 @@
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getApiClient } from '@/lib/api/client';
 import { CourseActionCard } from '@/components/courses/CourseActionCard';
 import { CurriculumAccordion } from '@/components/courses/CurriculumAccordion';
 import { LandingNav } from '@/components/layouts/LandingNav';
 import { LandingFooter } from '@/components/layouts/LandingFooter';
+import { BeginnerCourseView } from '@/components/courses/BeginnerCourseView';
 import '@/app/landing.css';
 import { BookOpen, BarChart, Globe } from 'lucide-react';
 import { Metadata } from 'next';
@@ -29,6 +31,18 @@ export async function generateMetadata({ params }: CourseDetailPageProps): Promi
 }
 
 export default async function CourseDetailPage({ params }: CourseDetailPageProps) {
+  if (params.slug === 'master-trader-programme') {
+    return (
+      <div data-theme="landing" className="min-h-screen flex flex-col font-sans">
+        <LandingNav />
+        <main className="flex-1">
+          <BeginnerCourseView />
+        </main>
+        <LandingFooter />
+      </div>
+    );
+  }
+
   const client = await getApiClient();
   const { data, error } = await client.GET('/courses/{slug}', {
     params: { path: { slug: params.slug } }
@@ -50,6 +64,13 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   const charCode = course.title.charCodeAt(0) || 0;
   const gradientClass = gradientPresets[charCode % gradientPresets.length];
 
+  const posterImage =
+    course.slug === 'mastery-derivatives-risk-management'
+      ? '/brand/mastery-derivatives.jpg'
+      : course.slug === 'master-trader-programme'
+      ? '/brand/master-trader-programme.jpg'
+      : course.thumbnailUrl;
+
   return (
     <div data-theme="landing" className="min-h-screen bg-[#f8fafc] text-gray-900 flex flex-col font-sans">
       <LandingNav />
@@ -64,29 +85,46 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
         )}
         <div className="absolute inset-0 bg-[var(--lp-navy-deepest)]/80 -z-10" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-          <div className="max-w-3xl">
-            <div className="flex flex-wrap items-center gap-3 mb-6">
-              <span className="px-3 py-1 text-xs font-bold uppercase rounded-full bg-[rgba(212,148,30,0.15)] text-[var(--lp-gold-bright)] border border-[rgba(212,148,30,0.3)]">
-                {course.format.replace('_', ' ')}
-              </span>
-              <span className="flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-white/10 text-white/90">
-                <BarChart className="w-3.5 h-3.5" />
-                {course.level}
-              </span>
-              <span className="flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-white/10 text-white/90">
-                <Globe className="w-3.5 h-3.5" />
-                {course.language}
-              </span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.9fr] gap-10 items-center">
+            <div>
+              <div className="flex flex-wrap items-center gap-3 mb-6">
+                <span className="px-3 py-1 text-xs font-bold uppercase rounded-full bg-[rgba(212,148,30,0.15)] text-[var(--lp-gold-bright)] border border-[rgba(212,148,30,0.3)]">
+                  {course.format.replace('_', ' ')}
+                </span>
+                <span className="flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-white/10 text-white/90">
+                  <BarChart className="w-3.5 h-3.5" />
+                  {course.level}
+                </span>
+                <span className="flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-white/10 text-white/90">
+                  <Globe className="w-3.5 h-3.5" />
+                  {course.language}
+                </span>
+              </div>
+              
+              <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+                {course.title}
+              </h1>
+              
+              <p className="text-lg text-white/80 leading-relaxed max-w-2xl">
+                {course.description}
+              </p>
             </div>
-            
-            <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
-              {course.title}
-            </h1>
-            
-            <p className="text-lg text-white/80 leading-relaxed max-w-2xl">
-              {course.description}
-            </p>
+
+            {/* Course Poster Graphic */}
+            {posterImage && (
+              <div className="flex justify-center lg:justify-end">
+                <div className="relative w-full max-w-[380px] aspect-square rounded-3xl overflow-hidden shadow-2xl border-2 border-white/20 group bg-slate-900/60">
+                  <Image
+                    src={posterImage}
+                    alt={course.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    priority
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

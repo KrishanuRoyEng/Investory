@@ -75,11 +75,11 @@ export const ASSETS = {
 
   /** Instructor cutout — transparent PNG/WebP, used in course card banners */
   instructorCutoutJayanta: {
-    path: '/brand/instructor-cutout-jayanta.png',
+    path: '/brand/mastery-derivatives.jpg',
     alt: 'Jayanta Sarkar, Invesone instructor',
-    width: 180,
-    height: 240,
-    filled: false, // TODO(asset): not yet provided
+    width: 340,
+    height: 340,
+    filled: true,
   },
 
   /** Mentorship section banner */
