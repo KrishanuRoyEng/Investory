@@ -28,7 +28,7 @@ export function HeroCarousel({ items }: { items?: any[] }) {
   }, []);
 
   return (
-    <div className="relative w-full aspect-square max-w-[420px] rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center ml-auto border border-white/20 group bg-slate-900/60">
+    <div className="relative w-full aspect-square max-w-[340px] sm:max-w-[420px] rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center mx-auto lg:ml-auto border border-white/20 group bg-slate-900/60">
       {BANNERS.map((banner, idx) => (
         <Link
           key={banner.src}

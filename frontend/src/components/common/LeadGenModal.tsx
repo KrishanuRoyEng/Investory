@@ -41,9 +41,19 @@ export function LeadGenModal() {
     };
     window.addEventListener('open-lead-modal', handleManualOpen);
 
+    // Escape key listener to close
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+        sessionStorage.setItem('invesone_lead_modal_dismissed', 'true');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('open-lead-modal', handleManualOpen);
+      window.removeEventListener('keydown', handleKeyDown);
       if (timer) clearTimeout(timer);
     };
   }, []);
@@ -71,9 +81,14 @@ export function LeadGenModal() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+    <div 
+      onClick={(e) => {
+        if (e.target === e.currentTarget) handleClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200"
+    >
       <div
-        className="relative w-full max-w-lg bg-[#0b162c] text-white rounded-3xl border border-white/15 p-6 sm:p-8 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-lg max-h-[92vh] overflow-y-auto bg-[#0b162c] text-white rounded-2xl sm:rounded-3xl border border-white/15 p-4 sm:p-7 shadow-2xl animate-in zoom-in-95 duration-200"
         style={{
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 40px rgba(212, 148, 30, 0.1)',
         }}
@@ -81,13 +96,23 @@ export function LeadGenModal() {
         {/* Glow */}
         <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--lp-gold)]/10 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Close Button */}
+        {/* Close Button — TOP LEFT as explicitly requested */}
         <button
           onClick={handleClose}
           aria-label="Close modal"
-          className="absolute top-5 right-5 p-2 rounded-full text-white/50 hover:text-white hover:bg-white/10 transition-colors z-20"
+          className="absolute top-3 left-3 sm:top-5 sm:left-5 p-2 rounded-full text-white/70 hover:text-white hover:bg-white/10 bg-white/5 border border-white/10 transition-colors z-30 flex items-center justify-center"
+          title="Close (Esc)"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4 sm:w-5 sm:h-5" />
+        </button>
+
+        {/* Secondary close button on top-right for convenience */}
+        <button
+          onClick={handleClose}
+          aria-label="Close modal"
+          className="absolute top-3 right-3 sm:top-5 sm:right-5 p-2 rounded-full text-white/50 hover:text-white hover:bg-white/10 transition-colors z-30 hidden sm:flex items-center justify-center"
+        >
+          <X className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
 
         {submitted ? (
@@ -107,25 +132,25 @@ export function LeadGenModal() {
             </button>
           </div>
         ) : (
-          <div>
+          <div className="pt-8 sm:pt-2">
             {/* Modal Header */}
-            <div className="mb-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-[rgba(212,148,30,0.15)] text-[var(--lp-gold-bright)] border border-[rgba(212,148,30,0.3)] mb-3">
+            <div className="mb-4 sm:mb-6">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-widest bg-[rgba(212,148,30,0.15)] text-[var(--lp-gold-bright)] border border-[rgba(212,148,30,0.3)] mb-2 sm:mb-3">
                 <Sparkles className="w-3 h-3" />
                 Course Enquiry &amp; Free Counseling
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-snug">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-snug">
                 Take Your First Step in the <span style={{ color: 'var(--lp-gold-bright)' }}>Markets</span>
               </h2>
-              <p className="text-xs sm:text-sm text-white/70 mt-1 leading-relaxed">
+              <p className="text-[11px] sm:text-xs md:text-sm text-white/70 mt-1 leading-relaxed">
                 Connect directly with our certified mentors. Get full syllabus details, class timings, and discount options.
               </p>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-3.5">
+            <form onSubmit={handleSubmit} className="space-y-2.5 sm:space-y-3.5">
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-white/70 mb-1">
+                <label className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 mb-1">
                   Your Name *
                 </label>
                 <input
@@ -134,13 +159,13 @@ export function LeadGenModal() {
                   placeholder="e.g. Rahul Sharma"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-white/30 text-sm outline-none focus:border-[var(--brand-blue)] focus:ring-1 focus:ring-[var(--brand-blue)] transition-all"
+                  className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-white/30 text-xs sm:text-sm outline-none focus:border-[var(--brand-blue)] focus:ring-1 focus:ring-[var(--brand-blue)] transition-all"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-white/70 mb-1">
+                  <label className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 mb-1">
                     Phone Number *
                   </label>
                   <input
@@ -149,12 +174,12 @@ export function LeadGenModal() {
                     placeholder="+91 98765 43210"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-white/30 text-sm outline-none focus:border-[var(--brand-blue)] focus:ring-1 focus:ring-[var(--brand-blue)] transition-all"
+                    className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-white/30 text-xs sm:text-sm outline-none focus:border-[var(--brand-blue)] focus:ring-1 focus:ring-[var(--brand-blue)] transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-white/70 mb-1">
+                  <label className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 mb-1">
                     Email Address *
                   </label>
                   <input
@@ -163,19 +188,19 @@ export function LeadGenModal() {
                     placeholder="rahul@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-white/30 text-sm outline-none focus:border-[var(--brand-blue)] focus:ring-1 focus:ring-[var(--brand-blue)] transition-all"
+                    className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-white/30 text-xs sm:text-sm outline-none focus:border-[var(--brand-blue)] focus:ring-1 focus:ring-[var(--brand-blue)] transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-white/70 mb-1">
+                <label className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 mb-1">
                   Course of Interest
                 </label>
                 <select
                   value={formData.course}
                   onChange={(e) => setFormData({ ...formData, course: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#0f1d38] border border-white/15 text-white text-sm outline-none focus:border-[var(--brand-blue)] focus:ring-1 focus:ring-[var(--brand-blue)] transition-all"
+                  className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#0f1d38] border border-white/15 text-white text-xs sm:text-sm outline-none focus:border-[var(--brand-blue)] focus:ring-1 focus:ring-[var(--brand-blue)] transition-all"
                 >
                   <option value="Master Trader Programme (Beginner 10-Day)">Master Trader Programme (Beginner 10-Day)</option>
                   <option value="Technical Analysis Masterclass">Technical Analysis Masterclass</option>
@@ -186,13 +211,13 @@ export function LeadGenModal() {
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-white/70 mb-1">
+                <label className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 mb-1">
                   Current Market Experience
                 </label>
                 <select
                   value={formData.experience}
                   onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#0f1d38] border border-white/15 text-white text-sm outline-none focus:border-[var(--brand-blue)] focus:ring-1 focus:ring-[var(--brand-blue)] transition-all"
+                  className="w-full px-3.5 py-2 sm:py-2.5 rounded-xl bg-[#0f1d38] border border-white/15 text-white text-xs sm:text-sm outline-none focus:border-[var(--brand-blue)] focus:ring-1 focus:ring-[var(--brand-blue)] transition-all"
                 >
                   <option value="Complete Beginner (Zero knowledge)">Complete Beginner (Zero knowledge)</option>
                   <option value="Some Knowledge (Watched videos / reads charts)">Some Knowledge (Watched videos / reads charts)</option>
@@ -202,7 +227,7 @@ export function LeadGenModal() {
 
               <button
                 type="submit"
-                className="w-full mt-2 py-3.5 rounded-xl bg-[var(--brand-blue)] hover:bg-blue-600 text-white font-bold text-sm transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2"
+                className="w-full mt-2 py-3 sm:py-3.5 rounded-xl bg-[var(--brand-blue)] hover:bg-blue-600 text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2"
               >
                 Request Free Counselor Callback <ArrowRight className="w-4 h-4" />
               </button>

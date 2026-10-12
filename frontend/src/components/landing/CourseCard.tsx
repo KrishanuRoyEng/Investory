@@ -64,56 +64,56 @@ export function CourseCard({ course }: CourseCardProps) {
       </div>
 
       {/* Body */}
-      <div className="p-6 flex-1 flex flex-col">
-        <h3 className="font-bold text-xl text-gray-900 mb-1 line-clamp-1">{course.title}</h3>
+      <div className="p-4 sm:p-6 flex-1 flex flex-col">
+        <h3 className="font-bold text-lg sm:text-xl text-gray-900 mb-1 line-clamp-1">{course.title}</h3>
         {course.instructorName ? (
-          <p className="text-xs text-gray-500 mb-4">by {course.instructorName}</p>
+          <p className="text-xs text-gray-500 mb-3 sm:mb-4">by {course.instructorName}</p>
         ) : (
-          <div className="h-4 mb-4" />
+          <div className="h-3 sm:h-4 mb-3 sm:mb-4" />
         )}
         
-        <p className="text-sm text-gray-600 mb-4 flex-1 line-clamp-2">
+        <p className="text-xs sm:text-sm text-gray-600 mb-4 flex-1 line-clamp-2">
           {course.skills?.length ? course.skills.join(' • ') : course.description}
         </p>
         
-        <p className="text-xs font-semibold text-[var(--brand-blue)] mb-6 flex items-center gap-1.5">
+        <p className="text-xs font-semibold text-[var(--brand-blue)] mb-4 sm:mb-6 flex items-center gap-1.5">
           <Users className="w-4 h-4" /> {course.displayLearnerCount || 0} Learners
         </p>
         
-        <div className="h-px w-full bg-gray-100 mb-4"></div>
+        <div className="h-px w-full bg-gray-100 mb-3 sm:mb-4"></div>
         
-        <div className="flex items-center mb-6 min-h-[32px]">
+        <div className="flex items-center mb-4 sm:mb-6 min-h-[32px]">
           {currentPrice !== null ? (
             <>
-              <span className="text-2xl font-extrabold text-gray-900">₹{currentPrice.toLocaleString()}</span>
+              <span className="text-xl sm:text-2xl font-extrabold text-gray-900">₹{currentPrice.toLocaleString()}</span>
               {wasPriceDisplay && (
-                <span className="text-sm line-through text-gray-400 ml-2">₹{wasPriceDisplay.toLocaleString()}</span>
+                <span className="text-xs sm:text-sm line-through text-gray-400 ml-2">₹{wasPriceDisplay.toLocaleString()}</span>
               )}
             </>
           ) : (
-            <span className="text-sm font-bold text-gray-400">Currently Unavailable</span>
+            <span className="text-xs sm:text-sm font-bold text-gray-400">Currently Unavailable</span>
           )}
         </div>
         
-        <div className="flex flex-col sm:flex-row items-center gap-3 mt-auto">
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 mt-auto">
           <Link 
             href={`/courses/${course.slug}`}
-            className={`w-full sm:w-1/2 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-semibold transition-colors
+            className={`w-full sm:w-1/2 flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors
               ${!brochurePrimary ? 'bg-[var(--lp-navy-deepest)] text-white hover:bg-[var(--lp-navy-light)]' : 'border border-gray-300 text-gray-700 hover:border-gray-400'}`}
           >
-            <Eye className="w-4 h-4" /> View Details
+            <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> View Details
           </Link>
 
           <a 
             href={hasBrochure ? brochurePath : '#'}
-            className={`w-full sm:w-1/2 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-semibold transition-colors
+            className={`w-full sm:w-1/2 flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors
               ${brochurePrimary ? 'bg-[var(--brand-blue)] text-white hover:bg-blue-600' : 'border border-gray-300 text-gray-700 hover:border-gray-400'}
               ${!hasBrochure ? 'opacity-50 cursor-not-allowed' : ''}`}
             title={!hasBrochure ? 'Brochure coming soon' : ''}
             target={hasBrochure ? '_blank' : undefined}
             rel={hasBrochure ? 'noopener noreferrer' : undefined}
           >
-            <Download className="w-4 h-4" /> Brochure
+            <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Brochure
           </a>
         </div>
       </div>

@@ -72,7 +72,7 @@ export function CourseFiltersSidebar({ categories }: CourseFiltersSidebarProps) 
       {/* Sidebar Content */}
       <div className={`fixed inset-0 z-50 bg-black/50 lg:hidden transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={() => setIsOpen(false)} />
       
-      <div className={`fixed lg:static inset-y-0 right-0 z-50 w-[300px] lg:w-full bg-white lg:bg-transparent shadow-2xl lg:shadow-none p-6 lg:p-0 transition-transform duration-300 ease-in-out lg:transform-none ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed lg:static inset-y-0 right-0 z-50 w-[300px] lg:w-full max-h-screen overflow-y-auto bg-white lg:bg-transparent shadow-2xl lg:shadow-none p-6 lg:p-0 transition-transform duration-300 ease-in-out lg:transform-none ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex items-center justify-between lg:hidden mb-8">
           <h2 className="text-xl font-extrabold text-[var(--lp-navy-deepest)]">Filters</h2>
           <button onClick={() => setIsOpen(false)} className="p-2 text-gray-400 hover:text-gray-900 bg-gray-100 rounded-full">

@@ -49,33 +49,33 @@ export function BeginnerCourseView() {
             {/* Left Content */}
             <div>
               {/* Top Label */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[rgba(212,148,30,0.15)] text-[var(--lp-gold-bright)] border border-[rgba(212,148,30,0.3)] mb-6">
-                <Sparkles className="w-3.5 h-3.5" />
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-[rgba(212,148,30,0.15)] text-[var(--lp-gold-bright)] border border-[rgba(212,148,30,0.3)] mb-4 sm:mb-6">
+                <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 BEGINNER-FRIENDLY · 10-DAY STRUCTURED PROGRAMME
               </div>
 
               {/* Title */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-4 sm:mb-6">
                 Master Trader <span style={{ color: 'var(--lp-gold-bright)' }}>Programme</span>
               </h1>
 
               {/* Description */}
-              <p className="text-base sm:text-lg text-white/80 leading-relaxed max-w-2xl mb-8">
+              <p className="text-sm sm:text-base lg:text-lg text-white/80 leading-relaxed max-w-2xl mb-6 sm:mb-8">
                 A structured, mentor-led learning experience that builds your understanding of technical and fundamental analysis—from reading price action and chart patterns to evaluating company financials, with a focus on analytical thinking, risk awareness, and disciplined decision-making.
               </p>
 
               {/* CTA & Price */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-6">
                 <Link
                   href="/coming-soon"
-                  className="px-8 py-4 rounded-xl bg-gradient-to-r from-[#d9383a] to-[#c52b2d] hover:from-[#c52b2d] hover:to-[#b02224] text-white text-base font-bold transition-all shadow-xl shadow-red-900/30 flex items-center gap-3 transform hover:-translate-y-0.5"
+                  className="px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-[#d9383a] to-[#c52b2d] hover:from-[#c52b2d] hover:to-[#b02224] text-white text-sm sm:text-base font-bold transition-all shadow-xl shadow-red-900/30 flex items-center justify-center gap-3 transform hover:-translate-y-0.5"
                 >
                   <span>Enrol Now for ₹8,999</span>
                   <span className="text-xs line-through text-white/60 font-normal">₹14,999</span>
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Link>
 
-                <div className="text-xs text-white/60">
+                <div className="text-xs text-white/60 text-center sm:text-left">
                   <p className="font-semibold text-white/90">Batch Admissions Opening Soon</p>
                   <p>10 Days Live · Interactive Mentorship</p>
                 </div>
@@ -84,7 +84,7 @@ export function BeginnerCourseView() {
 
             {/* Right Card: Official Master Trader Programme Graphic */}
             <div className="flex flex-col items-center justify-center">
-              <div className="relative w-full max-w-[480px] aspect-square rounded-3xl overflow-hidden shadow-2xl border-2 border-white/20 group bg-slate-900/60">
+              <div className="relative w-full max-w-[320px] sm:max-w-[440px] aspect-square rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-white/20 group bg-slate-900/60">
                 <Image
                   src="/brand/master-trader-programme.jpg"
                   alt="Master Trader Programme - INVESONE"
@@ -101,41 +101,41 @@ export function BeginnerCourseView() {
 
       {/* ══ STATS STRIP ══ */}
       <section className="relative z-10 border-y border-white/10 bg-[#0d1729]">
-        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center">
             
-            <div className="p-4 border-r border-white/5 last:border-none">
-              <div className="text-2xl sm:text-3xl font-extrabold text-white mb-1">
+            <div className="p-2.5 sm:p-4 border-r border-white/5 last:border-none">
+              <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white mb-0.5 sm:mb-1">
                 1,500+
               </div>
-              <div className="text-xs sm:text-sm text-white/60 font-medium">
+              <div className="text-[11px] sm:text-sm text-white/60 font-medium">
                 Learners*
               </div>
             </div>
 
-            <div className="p-4 border-r border-white/5 last:border-none">
-              <div className="text-2xl sm:text-3xl font-extrabold text-[var(--lp-gold-bright)] mb-1">
+            <div className="p-2.5 sm:p-4 border-r border-white/5 last:border-none">
+              <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[var(--lp-gold-bright)] mb-0.5 sm:mb-1">
                 4.5★
               </div>
-              <div className="text-xs sm:text-sm text-white/60 font-medium">
+              <div className="text-[11px] sm:text-sm text-white/60 font-medium">
                 Student Rating*
               </div>
             </div>
 
-            <div className="p-4 border-r border-white/5 last:border-none">
-              <div className="text-2xl sm:text-3xl font-extrabold text-white mb-1">
+            <div className="p-2.5 sm:p-4 border-r border-white/5 last:border-none">
+              <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white mb-0.5 sm:mb-1">
                 Live
               </div>
-              <div className="text-xs sm:text-sm text-white/60 font-medium">
+              <div className="text-[11px] sm:text-sm text-white/60 font-medium">
                 Instructor-Led Learning
               </div>
             </div>
 
-            <div className="p-4">
-              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400 mb-1">
+            <div className="p-2.5 sm:p-4">
+              <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-emerald-400 mb-0.5 sm:mb-1">
                 NISM-Certified
               </div>
-              <div className="text-xs sm:text-sm text-white/60 font-medium">
+              <div className="text-[11px] sm:text-sm text-white/60 font-medium">
                 Trainers*
               </div>
             </div>

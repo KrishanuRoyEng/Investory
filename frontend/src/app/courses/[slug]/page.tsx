@@ -85,28 +85,28 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
         )}
         <div className="absolute inset-0 bg-[var(--lp-navy-deepest)]/80 -z-10" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.9fr] gap-10 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.9fr] gap-8 lg:gap-10 items-center">
             <div>
-              <div className="flex flex-wrap items-center gap-3 mb-6">
-                <span className="px-3 py-1 text-xs font-bold uppercase rounded-full bg-[rgba(212,148,30,0.15)] text-[var(--lp-gold-bright)] border border-[rgba(212,148,30,0.3)]">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                <span className="px-2.5 sm:px-3 py-1 text-[10px] sm:text-xs font-bold uppercase rounded-full bg-[rgba(212,148,30,0.15)] text-[var(--lp-gold-bright)] border border-[rgba(212,148,30,0.3)]">
                   {course.format.replace('_', ' ')}
                 </span>
-                <span className="flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-white/10 text-white/90">
+                <span className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 text-[10px] sm:text-xs font-medium rounded-full bg-white/10 text-white/90">
                   <BarChart className="w-3.5 h-3.5" />
                   {course.level}
                 </span>
-                <span className="flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full bg-white/10 text-white/90">
+                <span className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 text-[10px] sm:text-xs font-medium rounded-full bg-white/10 text-white/90">
                   <Globe className="w-3.5 h-3.5" />
                   {course.language}
                 </span>
               </div>
               
-              <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white mb-4 sm:mb-6 leading-tight">
                 {course.title}
               </h1>
               
-              <p className="text-lg text-white/80 leading-relaxed max-w-2xl">
+              <p className="text-sm sm:text-base md:text-lg text-white/80 leading-relaxed max-w-2xl">
                 {course.description}
               </p>
             </div>
@@ -114,7 +114,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             {/* Course Poster Graphic */}
             {posterImage && (
               <div className="flex justify-center lg:justify-end">
-                <div className="relative w-full max-w-[380px] aspect-square rounded-3xl overflow-hidden shadow-2xl border-2 border-white/20 group bg-slate-900/60">
+                <div className="relative w-full max-w-[300px] sm:max-w-[380px] aspect-square rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-white/20 group bg-slate-900/60">
                   <Image
                     src={posterImage}
                     alt={course.title}
@@ -129,18 +129,23 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
         </div>
       </div>
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 w-full">
+        {/* Action Card on Mobile/Tablet */}
+        <div className="lg:hidden block mb-8">
+          <CourseActionCard courseId={course.id!} courseSlug={course.slug!} pricePaise={course.pricePaise!} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Main Content Area */}
-          <div className="lg:col-span-2 space-y-12">
+          <div className="lg:col-span-2 space-y-8 sm:space-y-12">
             
             {/* About Section */}
-            <section className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
-              <h2 className="text-2xl font-bold text-[#0f172a] mb-6 flex items-center gap-2">
-                <BookOpen className="w-6 h-6 text-[var(--brand-blue)]" />
+            <section className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-8 shadow-sm">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#0f172a] mb-4 sm:mb-6 flex items-center gap-2">
+                <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--brand-blue)]" />
                 About this course
               </h2>
-              <div className="prose text-gray-700 max-w-none text-sm leading-relaxed">
+              <div className="prose text-gray-700 max-w-none text-xs sm:text-sm leading-relaxed">
                 <p className="whitespace-pre-wrap">
                   {course.description}
                 </p>
@@ -148,8 +153,8 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             </section>
 
             {/* Curriculum Section */}
-            <section id="curriculum" className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
-              <h2 className="text-2xl font-bold text-[#0f172a] mb-6">
+            <section id="curriculum" className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-8 shadow-sm">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#0f172a] mb-4 sm:mb-6">
                 Curriculum Overview
               </h2>
               <CurriculumAccordion modules={course.modules || []} />

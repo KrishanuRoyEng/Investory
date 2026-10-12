@@ -122,37 +122,37 @@ export default async function LandingPage() {
 
               {/* Left */}
               <div>
-                <h1 className="font-extrabold leading-[1.1] tracking-tight mb-6 text-[clamp(2.5rem,5vw,3.75rem)]" style={{ color: 'var(--lp-white)' }}>
+                <h1 className="font-extrabold leading-[1.1] tracking-tight mb-4 sm:mb-6 text-[clamp(1.85rem,5vw,3.75rem)]" style={{ color: 'var(--lp-white)' }}>
                   {HERO.h1Line1}<br />
                   <span style={{ color: 'var(--lp-gold-bright)' }}>{HERO.h1Line2}</span>
                 </h1>
-                <p className="text-base lg:text-lg max-w-xl mb-8 leading-relaxed" style={{ color: 'var(--lp-white-70)' }}>
+                <p className="text-sm sm:text-base lg:text-lg max-w-xl mb-6 sm:mb-8 leading-relaxed" style={{ color: 'var(--lp-white-70)' }}>
                   {HERO.subheadline}
                 </p>
-                <p className="text-sm md:text-base font-medium mb-4" style={{ color: 'var(--lp-white-90)' }}>
+                <p className="text-xs sm:text-sm md:text-base font-medium mb-3 sm:mb-4" style={{ color: 'var(--lp-white-90)' }}>
                   {HERO.leadIn}
                 </p>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2.5 sm:gap-3">
                   {JOURNEY_CARDS.map((card) => {
                     const IconComp = ICONS[card.icon];
                     return (
                       <Link
                         key={card.title}
                         href={card.href}
-                        className="group relative flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-transform hover:-translate-y-1 hover:shadow-lg"
+                        className="group relative flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl cursor-pointer transition-transform hover:-translate-y-1 hover:shadow-lg"
                         style={{
                           background: 'linear-gradient(90deg, #f0f4f8 0%, #e6eff7 100%)',
                           border: '1px solid #d9e2ec',
                         }}
                       >
-                        <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 bg-white shadow-sm border border-blue-100">
-                          {IconComp && <IconComp className="w-6 h-6 text-[var(--brand-blue)]" />}
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center shrink-0 bg-white shadow-sm border border-blue-100">
+                          {IconComp && <IconComp className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--brand-blue)]" />}
                         </div>
-                        <div className="flex-1">
-                          <p className="font-bold text-sm leading-tight text-gray-900">{card.title}</p>
-                          <p className="text-xs leading-relaxed mt-0.5 text-gray-600">{card.sub}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-xs sm:text-sm leading-tight text-gray-900 truncate">{card.title}</p>
+                          <p className="text-[11px] sm:text-xs leading-relaxed mt-0.5 text-gray-600 line-clamp-1">{card.sub}</p>
                         </div>
-                        <span className="text-xs font-semibold shrink-0 ml-4 text-[var(--brand-blue)]">
+                        <span className="text-[11px] sm:text-xs font-semibold shrink-0 ml-2 sm:ml-4 text-[var(--brand-blue)]">
                           Explore ↓
                         </span>
                       </Link>
@@ -175,18 +175,12 @@ export default async function LandingPage() {
           </div>
 
           {/* ══ STATS BAR ══ */}
-          <div className="relative z-10 w-full max-w-[1200px] mx-auto px-4 lg:px-8 translate-y-1/2">
-            <div className="bg-[#1a2340] rounded-2xl border border-[#2a365c] py-5 px-6 lg:px-12 flex justify-between md:justify-around items-center text-center shadow-2xl">
+          <div className="relative z-10 w-full max-w-[1200px] mx-auto px-4 lg:px-8 translate-y-1/4 sm:translate-y-1/2">
+            <div className="bg-[#1a2340] rounded-2xl border border-[#2a365c] py-4 sm:py-5 px-4 sm:px-6 lg:px-12 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center shadow-2xl">
               {HERO_STATS.map((s, i) => (
-                <div key={i} className="flex flex-col items-center sm:flex-row gap-3">
-                  <div className="text-left hidden sm:block">
-                    <span className="text-xl md:text-2xl font-bold text-white block">{s.value}</span>
-                    <span className="text-[10px] md:text-xs text-gray-400 block">{s.label}</span>
-                  </div>
-                  <div className="text-center sm:hidden">
-                    <span className="text-lg font-bold text-white block">{s.value}</span>
-                    <span className="text-[10px] text-gray-400 block">{s.label}</span>
-                  </div>
+                <div key={i} className="flex flex-col items-center justify-center p-2 rounded-xl bg-white/[0.02]">
+                  <span className="text-lg sm:text-xl md:text-2xl font-extrabold text-white block">{s.value}</span>
+                  <span className="text-[10px] sm:text-xs text-gray-400 block mt-0.5">{s.label}</span>
                 </div>
               ))}
             </div>
@@ -194,14 +188,14 @@ export default async function LandingPage() {
         </section>
 
         {/* ══ SPOTLIGHT ══ */}
-        <section className="py-20 px-4 lg:px-8 bg-gray-50 text-gray-900" style={{ color: '#111827' }}>
+        <section className="pt-20 sm:pt-28 pb-12 sm:pb-20 px-4 lg:px-8 bg-gray-50 text-gray-900" style={{ color: '#111827' }}>
           <div className="max-w-[1400px] mx-auto">
-            <Link href={SPOTLIGHT.eyebrowHref} className="inline-block text-sm font-semibold text-[var(--brand-blue)] hover:underline mb-6">
+            <Link href={SPOTLIGHT.eyebrowHref} className="inline-block text-xs sm:text-sm font-semibold text-[var(--brand-blue)] hover:underline mb-4 sm:mb-6">
               {SPOTLIGHT.eyebrowLink}
             </Link>
             <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200">
               <div className="grid grid-cols-1 md:grid-cols-2">
-                <div className="relative min-h-[320px] md:min-h-0 bg-[#0a1628] flex items-center justify-center overflow-hidden">
+                <div className="relative min-h-[260px] sm:min-h-[320px] md:min-h-0 bg-[#0a1628] flex items-center justify-center overflow-hidden">
                   <Image 
                     src="/brand/master-trader-programme.jpg" 
                     alt="Master Trader Programme - INVESONE" 
@@ -210,58 +204,58 @@ export default async function LandingPage() {
                   />
                 </div>
                 
-                <div className="p-10 lg:p-14 flex flex-col justify-center">
-                  <h2 className="text-3xl lg:text-4xl font-extrabold mb-4 leading-snug">
+                <div className="p-6 sm:p-10 lg:p-14 flex flex-col justify-center">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold mb-3 sm:mb-4 leading-snug">
                     {SPOTLIGHT.title}
                   </h2>
-                  <p className="text-sm lg:text-base mb-8 leading-relaxed text-gray-600">
+                  <p className="text-xs sm:text-sm lg:text-base mb-6 sm:mb-8 leading-relaxed text-gray-600">
                     {SPOTLIGHT.description}
                   </p>
                   
-                  <div className="flex flex-wrap gap-4 mb-8">
+                  <div className="flex flex-wrap gap-2.5 sm:gap-4 mb-6 sm:mb-8">
                     {SPOTLIGHT.chips.map((chip, i) => {
                       const IconComp = ICONS[chip.icon];
                       return (
                         <div key={i} className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gray-100 text-gray-600">
-                            {IconComp && <IconComp className="w-4 h-4" />}
+                          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center bg-gray-100 text-gray-600">
+                            {IconComp && <IconComp className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
                           </div>
-                          <span className="text-sm font-medium">{chip.text}</span>
+                          <span className="text-xs sm:text-sm font-medium">{chip.text}</span>
                         </div>
                       );
                     })}
                   </div>
 
-                  <div className="mb-8">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">{SPOTLIGHT.skillsLabel}</p>
-                    <div className="flex flex-wrap gap-2">
+                  <div className="mb-6 sm:mb-8">
+                    <p className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider mb-2.5 sm:mb-3">{SPOTLIGHT.skillsLabel}</p>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {SPOTLIGHT.skills.map((skill, i) => (
-                        <span key={i} className="px-3 py-1.5 bg-gray-100 border border-gray-200 rounded-full text-xs font-medium text-gray-600">
+                        <span key={i} className="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-gray-100 border border-gray-200 rounded-full text-[11px] sm:text-xs font-medium text-gray-600">
                           {skill}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                       {spotlightPrice !== null ? (
                         <>
-                          <span className="text-2xl font-extrabold text-[var(--lp-navy-deepest)]">₹{spotlightPrice.toLocaleString()}</span>
+                          <span className="text-xl sm:text-2xl font-extrabold text-[var(--lp-navy-deepest)]">₹{spotlightPrice.toLocaleString()}</span>
                           {SPOTLIGHT.wasPrice && SPOTLIGHT.wasPrice > spotlightPrice * 100 && (
                             <>
-                              <span className="text-sm line-through text-gray-400 ml-2">₹{Math.floor(SPOTLIGHT.wasPrice / 100).toLocaleString()}</span>
-                              <p className="text-xs font-bold text-green-600 mt-1">
+                              <span className="text-xs sm:text-sm line-through text-gray-400 ml-2">₹{Math.floor(SPOTLIGHT.wasPrice / 100).toLocaleString()}</span>
+                              <p className="text-[11px] sm:text-xs font-bold text-green-600 mt-0.5 sm:mt-1">
                                 You save ₹{Math.floor((SPOTLIGHT.wasPrice - spotlightPrice * 100) / 100).toLocaleString()}
                               </p>
                             </>
                           )}
                         </>
                       ) : (
-                        <span className="text-sm font-bold text-gray-400">Currently Unavailable</span>
+                        <span className="text-xs sm:text-sm font-bold text-gray-400">Currently Unavailable</span>
                       )}
                     </div>
-                    <Link href={SPOTLIGHT.ctaHref} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--lp-navy-deepest)] text-white text-sm font-bold hover:bg-[var(--lp-navy-light)] transition-colors">
+                    <Link href={SPOTLIGHT.ctaHref} className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-[var(--lp-navy-deepest)] text-white text-xs sm:text-sm font-bold hover:bg-[var(--lp-navy-light)] transition-colors">
                       {SPOTLIGHT.ctaText} <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
@@ -370,23 +364,23 @@ export default async function LandingPage() {
                         )}
                       </div>
                       
-                      <div className="flex items-center gap-3 mt-auto">
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-auto">
                         <Link 
                           href={course.viewDetailsHref} 
-                          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-semibold transition-colors
+                          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors
                             ${!course.brochurePrimary ? 'bg-[var(--lp-navy-deepest)] text-white hover:bg-[var(--lp-navy-light)]' : 'border border-gray-300 text-gray-700 hover:border-gray-400'}`}
                         >
-                          <Eye className="w-4 h-4" /> {course.viewDetailsLabel}
+                          <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {course.viewDetailsLabel}
                         </Link>
 
                         <a 
                           href={hasBrochure ? brochurePath : '#'}
-                          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-semibold transition-colors
+                          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors
                             ${course.brochurePrimary ? 'bg-[var(--brand-blue)] text-white hover:bg-blue-600' : 'border border-gray-300 text-gray-700 hover:border-gray-400'}
                             ${!hasBrochure ? 'opacity-50 cursor-not-allowed' : ''}`}
                           title={!hasBrochure ? 'Brochure coming soon' : ''}
                         >
-                          <Download className="w-4 h-4" /> {course.brochureLabel}
+                          <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {course.brochureLabel}
                         </a>
                       </div>
                     </div>
@@ -409,50 +403,50 @@ export default async function LandingPage() {
               </div>
             ) : (
               <div className="lp-mentorship-banner rounded-2xl grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden">
-                <div className="p-6 lg:p-8 relative z-10">
-                  <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] mb-4" style={{ color: 'var(--lp-gold-bright)' }}>
+                <div className="p-5 sm:p-8 lg:p-10 relative z-10">
+                  <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] mb-3 sm:mb-4" style={{ color: 'var(--lp-gold-bright)' }}>
                     {MENTORSHIP_BANNER.eyebrow}
                   </span>
-                  <h2 className="font-extrabold mb-4 leading-tight text-white text-[clamp(2rem,3.5vw,2.5rem)]">
+                  <h2 className="font-extrabold mb-3 sm:mb-4 leading-tight text-white text-2xl sm:text-3xl lg:text-[clamp(2rem,3.5vw,2.5rem)]">
                     {MENTORSHIP_BANNER.heading}
                   </h2>
-                  <p className="text-base mb-8 leading-relaxed max-w-lg" style={{ color: 'var(--lp-white-70)' }}>
+                  <p className="text-xs sm:text-base mb-6 sm:mb-8 leading-relaxed max-w-lg" style={{ color: 'var(--lp-white-70)' }}>
                     {MENTORSHIP_BANNER.subtext}
                   </p>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 mb-6 sm:mb-10">
                     {MENTORSHIP_BANNER.stats.map((s, i) => {
                       const IconComp = ICONS[s.icon];
                       return (
-                        <div key={i} className="bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.08)] rounded-xl p-4 flex flex-col gap-2">
-                          <div className="w-8 h-8 rounded-lg bg-[rgba(255,255,255,0.06)] flex items-center justify-center text-[var(--lp-gold-bright)]">
-                            {IconComp && <IconComp className="w-4 h-4" />}
+                        <div key={i} className="bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.08)] rounded-xl p-3 sm:p-4 flex flex-col gap-1.5 sm:gap-2">
+                          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[rgba(255,255,255,0.06)] flex items-center justify-center text-[var(--lp-gold-bright)]">
+                            {IconComp && <IconComp className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
                           </div>
-                          <p className="text-xl font-extrabold text-white">{s.val}</p>
-                          <p className="text-xs text-[var(--lp-white-50)]">{s.label}</p>
+                          <p className="text-lg sm:text-xl font-extrabold text-white">{s.val}</p>
+                          <p className="text-[11px] sm:text-xs text-[var(--lp-white-50)]">{s.label}</p>
                         </div>
                       )
                     })}
                   </div>
 
-                  <div className="mb-8">
-                    <p className="text-sm font-bold text-white mb-3">{MENTORSHIP_BANNER.skillsHeading}</p>
-                    <div className="flex flex-wrap gap-2">
+                  <div className="mb-6 sm:mb-8">
+                    <p className="text-xs sm:text-sm font-bold text-white mb-2.5 sm:mb-3">{MENTORSHIP_BANNER.skillsHeading}</p>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {MENTORSHIP_BANNER.skills.map((skill, i) => (
-                        <span key={i} className="px-3 py-1.5 rounded-full text-xs font-medium border border-[rgba(255,255,255,0.1)] text-[var(--lp-white-90)] bg-[rgba(0,0,0,0.2)]">
+                        <span key={i} className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-medium border border-[rgba(255,255,255,0.1)] text-[var(--lp-white-90)] bg-[rgba(0,0,0,0.2)]">
                           {skill}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  <Link href={MENTORSHIP_BANNER.ctaHref} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-[var(--lp-navy-deepest)] text-sm font-bold hover:bg-gray-100 transition-colors">
+                  <Link href={MENTORSHIP_BANNER.ctaHref} className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-white text-[var(--lp-navy-deepest)] text-xs sm:text-sm font-bold hover:bg-gray-100 transition-colors">
                     {MENTORSHIP_BANNER.ctaText} <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
 
-                <div className="relative min-h-[380px] lg:min-h-0 flex items-center justify-center lg:justify-end px-6 lg:px-12 py-8">
-                  <div className="relative w-full max-w-[340px] aspect-square rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 group bg-slate-900/60">
+                <div className="relative min-h-[280px] sm:min-h-[380px] lg:min-h-0 flex items-center justify-center lg:justify-end px-4 sm:px-6 lg:px-12 py-6 sm:py-8">
+                  <div className="relative w-full max-w-[280px] sm:max-w-[340px] aspect-square rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 group bg-slate-900/60">
                     <Image 
                       src="/brand/mastery-derivatives.jpg" 
                       alt="Jayanta Sarkar - Personal Mentorship by INVESONE" 
